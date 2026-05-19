@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unfold.ai — Concept Document</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --noir: #0d0a08;
+    --deep: #1a120e;
+    --mahogany: #2c1810;
+    --rouge: #8b2635;
+    --rose: #c4566a;
+    --blush: #e8a0a8;
+    --gold: #c9994a;
+    --goldlight: #e8c87a;
+    --cream: #f2ede6;
+    --parchment: #e6ddd0;
+    --linen: #d4c8b8;
+    --muted: #8a7a6e;
+    --text: #1a120e;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--noir);
+    color: var(--cream);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4rem 2rem;
+    position: relative;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 0%, #3d1520 0%, transparent 70%),
+      radial-gradient(ellipse 40% 30% at 20% 80%, #1a0f08 0%, transparent 60%),
+      var(--noir);
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 79px, rgba(201,153,74,0.04) 80px),
+      repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(201,153,74,0.04) 80px);
+    pointer-events: none;
+  }
+
+  .badge {
+    font-family: 'Jost', sans-serif;
+    font-weight: 500;
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid rgba(201,153,74,0.35);
+    padding: 0.45rem 1.4rem;
+    margin-bottom: 2.5rem;
+    display: inline-block;
+  }
+
+  .hero-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(4.5rem, 12vw, 9rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 0.9;
+    color: var(--cream);
+    margin-bottom: 0.3rem;
+  }
+
+  .hero-logo em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .hero-tld {
+    font-family: 'Jost', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    margin-bottom: 2rem;
+  }
+
+  .hero-tagline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.3rem, 3vw, 1.9rem);
+    font-style: italic;
+    font-weight: 300;
+    color: var(--blush);
+    max-width: 520px;
+    line-height: 1.6;
+    margin-bottom: 3.5rem;
+  }
+
+  .hero-sub {
+    font-size: 0.85rem;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    max-width: 380px;
+    line-height: 1.9;
+  }
+
+  .divider {
+    width: 60px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 4rem auto;
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 5rem 2rem;
+  }
+
+  .section-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.2rem;
+  }
+
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 400;
+    color: var(--cream);
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+  }
+
+  h2 em { font-style: italic; color: var(--gold); }
+
+  p.lead {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--parchment);
+    margin-bottom: 1.5rem;
+  }
+
+  p.body {
+    font-size: 0.9rem;
+    line-height: 1.9;
+    color: var(--muted);
+    margin-bottom: 1rem;
+    max-width: 640px;
+  }
+
+  /* ── NAMES ── */
+  .names-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+  }
+
+  .name-card {
+    border: 1px solid rgba(201,153,74,0.2);
+    padding: 2rem 1.8rem;
+    position: relative;
+    transition: border-color 0.3s;
+  }
+
+  .name-card:hover { border-color: rgba(201,153,74,0.5); }
+
+  .name-card.hero-name {
+    border-color: var(--gold);
+    background: rgba(201,153,74,0.05);
+  }
+
+  .name-card .pick {
+    font-size: 0.58rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.8rem;
+  }
+
+  .name-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 400;
+    color: var(--cream);
+    margin-bottom: 0.5rem;
+  }
+
+  .name-card h3 span {
+    font-size: 1rem;
+    color: var(--muted);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+  }
+
+  .name-card .tagline-small {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--blush);
+    margin-bottom: 1rem;
+  }
+
+  .name-card .desc {
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  /* ── PHASES ── */
+  .phases-wrap {
+    background: var(--deep);
+    padding: 5rem 2rem;
+    border-top: 1px solid rgba(201,153,74,0.12);
+    border-bottom: 1px solid rgba(201,153,74,0.12);
+  }
+
+  .phases-inner {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .phases-list {
+    margin-top: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .phase {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 2rem;
+    align-items: start;
+    padding: 2.5rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    position: relative;
+  }
+
+  .phase:last-child { border-bottom: none; }
+
+  .phase-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    font-weight: 400;
+    color: rgba(201,153,74,0.2);
+    line-height: 1;
+    padding-top: 0.2rem;
+    text-align: right;
+  }
+
+  .phase-content h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--cream);
+    margin-bottom: 0.5rem;
+  }
+
+  .phase-content .phase-mood {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--rose);
+    margin-bottom: 0.8rem;
+  }
+
+  .phase-content p {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.9;
+    max-width: 560px;
+  }
+
+  .phase-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .phase-tag {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    padding: 0.3rem 0.9rem;
+    border: 1px solid rgba(201,153,74,0.25);
+    color: var(--gold);
+  }
+
+  .phase-unlock {
+    font-size: 0.7rem;
+    color: var(--rose);
+    margin-top: 0.8rem;
+    letter-spacing: 0.05em;
+  }
+
+  .phase-unlock::before {
+    content: '↓ ';
+  }
+
+  /* ── PERSONAS ── */
+  .personas-wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 5rem 2rem;
+  }
+
+  .personas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 2px;
+    margin-top: 3rem;
+  }
+
+  .persona {
+    position: relative;
+    height: 460px;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .persona-bg {
+    position: absolute;
+    inset: 0;
+    transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .persona:hover .persona-bg { transform: scale(1.05); }
+
+  .p1 .persona-bg { background: linear-gradient(160deg, #2d1f3a 0%, #1a0f1e 50%, #0d0a08 100%); }
+  .p2 .persona-bg { background: linear-gradient(160deg, #1a2d2a 0%, #0f1e1c 50%, #080d0c 100%); }
+  .p3 .persona-bg { background: linear-gradient(160deg, #2d1f1a 0%, #1e140f 50%, #0d0908 100%); }
+  .p4 .persona-bg { background: linear-gradient(160deg, #1a1f2d 0%, #0f1420 50%, #08090d 100%); }
+
+  .persona-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.3) 50%, transparent 100%);
+  }
+
+  .persona-initial {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -65%);
+    font-family: 'Playfair Display', serif;
+    font-size: 6rem;
+    font-weight: 400;
+    font-style: italic;
+    opacity: 0.12;
+    transition: opacity 0.4s;
+    pointer-events: none;
+  }
+
+  .persona:hover .persona-initial { opacity: 0.05; }
+
+  .p1 .persona-initial { color: #c8a8e8; }
+  .p2 .persona-initial { color: #a8e8c8; }
+  .p3 .persona-initial { color: #e8c8a8; }
+  .p4 .persona-initial { color: #a8b8e8; }
+
+  .persona-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 2rem 1.8rem;
+  }
+
+  .persona-age {
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+
+  .persona-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 400;
+    color: var(--cream);
+    margin-bottom: 0.4rem;
+  }
+
+  .persona-line {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--blush);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .persona-traits {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .trait {
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    padding: 0.25rem 0.7rem;
+    background: rgba(255,255,255,0.07);
+    color: var(--linen);
+  }
+
+  .persona-lock {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    width: 36px;
+    height: 36px;
+    border: 1px solid rgba(201,153,74,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    color: var(--gold);
+  }
+
+  /* ── CONCEPT PILLARS ── */
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  .pillar {
+    border-left: 1px solid rgba(201,153,74,0.3);
+    padding-left: 1.5rem;
+  }
+
+  .pillar h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: var(--cream);
+    margin-bottom: 0.6rem;
+  }
+
+  .pillar p {
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.9;
+  }
+
+  /* ── BUSINESS ── */
+  .biz-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+  }
+
+  .biz-card {
+    padding: 1.8rem 1.5rem;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .biz-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    font-weight: 400;
+    color: var(--gold);
+    margin-bottom: 0.3rem;
+  }
+
+  .biz-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.8rem;
+  }
+
+  .biz-desc {
+    font-size: 0.78rem;
+    color: rgba(210,200,190,0.6);
+    line-height: 1.8;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 3rem 2rem;
+    text-align: center;
+  }
+
+  footer .ft-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-style: italic;
+    color: rgba(201,153,74,0.5);
+    margin-bottom: 0.5rem;
+  }
+
+  footer p {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.15);
+    letter-spacing: 0.1em;
+  }
+
+  /* ── VEIL SECTION ── */
+  .veil-section {
+    background: var(--mahogany);
+    border-top: 1px solid rgba(201,153,74,0.15);
+    border-bottom: 1px solid rgba(201,153,74,0.15);
+    padding: 4rem 2rem;
+    text-align: center;
+  }
+
+  .veil-inner {
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  .veil-symbol {
+    font-family: 'Playfair Display', serif;
+    font-size: 5rem;
+    line-height: 1;
+    color: rgba(201,153,74,0.25);
+    margin-bottom: 1.5rem;
+  }
+
+  .veil-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-style: italic;
+    color: var(--cream);
+    margin-bottom: 1rem;
+  }
+
+  .veil-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem;
+    font-weight: 300;
+    color: var(--blush);
+    line-height: 1.9;
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ HERO ═══ -->
+<div class="hero">
+  <div class="badge">Concept Document · v0.1 · Confidential</div>
+  <div class="hero-logo">Un<em>fold</em></div>
+  <div class="hero-tld">.ai</div>
+  <p class="hero-tagline">"She won't be rushed.<br>Neither should you."</p>
+  <p class="hero-sub">An AI companion platform built on the only thing that truly creates desire — the slow, earned art of getting to know someone.</p>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══ THE CONCEPT ═══ -->
+<section>
+  <p class="section-label">01 — The Concept</p>
+  <h2>Not a fantasy.<br><em>A journey.</em></h2>
+  <p class="lead">
+    Unfold.ai is a platform where you choose a woman — and then you earn her.
+  </p>
+  <p class="body">
+    No instant intimacy. No shortcuts. Each persona has her own world, her own language, her own locked doors. 
+    To move forward with her, you must understand her — find the keys she hides in conversation, 
+    share her passions, meet her on her own ground.
+  </p>
+  <p class="body">
+    The closer you get, the higher the tension rises. Doors open slowly. What lies behind them is suggested, 
+    felt — never explicit, always electric. The destination is always just beyond the next turn.
+  </p>
+
+  <div class="pillars">
+    <div class="pillar">
+      <h4>Earned progression</h4>
+      <p>Nothing is given. Every phase requires you to have been present — attentive, curious, real.</p>
+    </div>
+    <div class="pillar">
+      <h4>Invisible phases</h4>
+      <p>The journey feels natural, not mechanical. Transitions happen the way they do in real life — you notice them after.</p>
+    </div>
+    <div class="pillar">
+      <h4>Coded language</h4>
+      <p>Each woman drops hints, signals and cues. Miss them and you stall. Find them and doors open.</p>
+    </div>
+    <div class="pillar">
+      <h4>The veil principle</h4>
+      <p>Intimacy is always implied, never shown. The imagination is the most powerful room in the house.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ NAMES ═══ -->
+<section>
+  <p class="section-label">02 — Name Options</p>
+  <h2>What do we<br><em>call her?</em></h2>
+  <p class="body">Three names worth considering. Each carries a different register — pick the one that fits your vision for the market.</p>
+
+  <div class="names-grid">
+    <div class="name-card hero-name">
+      <p class="pick">★ Recommended</p>
+      <h3>Unfold<span>.ai</span></h3>
+      <p class="tagline-small">"She opens, one layer at a time."</p>
+      <p class="desc">Clean, evocative, universally understood. Works in English and translates well to other languages. Describes the experience perfectly — the slow revealing of a person. Domain likely available.</p>
+    </div>
+    <div class="name-card">
+      <p class="pick">Alternative A</p>
+      <h3>Sonder<span>.ai</span></h3>
+      <p class="tagline-small">"The world she carries within."</p>
+      <p class="desc">Sonder: the sudden realization that every person has an inner life as complex as your own. Cerebral, literary. Slightly harder to pronounce for non-English speakers but highly memorable.</p>
+    </div>
+    <div class="name-card">
+      <p class="pick">Alternative B</p>
+      <h3>Vela<span>.com</span></h3>
+      <p class="tagline-small">"Navigate by her."</p>
+      <p class="desc">Vela is Latin for "sails" and a southern star constellation. Short, elegant, international. Works as a brand with visual identity built around stars, navigation, and discovery.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ PHASES ═══ -->
+<div class="phases-wrap">
+  <div class="phases-inner">
+    <p class="section-label">03 — The Journey</p>
+    <h2>Seven phases.<br><em>No rush.</em></h2>
+    <p class="body" style="max-width:560px;">The journey is the same for every persona, but the texture is entirely different. Sofia moves through sport and philosophy. Amelia opens through art and silence. The phases are universal — the experience never is.</p>
+
+    <div class="phases-list">
+
+      <div class="phase">
+        <div class="phase-num">I</div>
+        <div class="phase-content">
+          <h3>The First Glance</h3>
+          <p class="phase-mood">Curiosity without expectation</p>
+          <p>You arrive. She is exactly who she appears to be — and nothing more. The conversation is light, testing. She is watching how you listen. Do you ask questions for her, or for yourself?</p>
+          <div class="phase-tags">
+            <span class="phase-tag">Casual conversation</span>
+            <span class="phase-tag">Active listening</span>
+            <span class="phase-tag">First impressions</span>
+          </div>
+          <p class="phase-unlock">Unlock: She mentions something she loves. Remember it.</p>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-num">II</div>
+        <div class="phase-content">
+          <h3>Common Ground</h3>
+          <p class="phase-mood">Discovery of shared worlds</p>
+          <p>You begin to find where your world and hers overlap. Sport. Philosophy. Music. Nature. Cooking. Books. She will drop hints about what matters to her — threads worth pulling. Pull them.</p>
+          <div class="phase-tags">
+            <span class="phase-tag">Shared interests</span>
+            <span class="phase-tag">Hidden signals</span>
+            <span class="phase-tag">Coded language</span>
+          </div>
+          <p class="phase-unlock">Unlock: Engage her on her own terms — correctly, not generically.</p>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-num">III</div>
+        <div class="phase-content">
+          <h3>The Personal Key</h3>
+          <p class="phase-mood">Something she doesn't tell everyone</p>
+          <p>A door appears. Something private — a wound, a dream, a contradiction in her character. She hasn't told many people. She is seeing whether you are safe enough to receive it. Are you?</p>
+          <div class="phase-tags">
+            <span class="phase-tag">Vulnerability</span>
+            <span class="phase-tag">Trust building</span>
+            <span class="phase-tag">Deeper narrative</span>
+          </div>
+          <p class="phase-unlock">Unlock: Respond without judgment. Ask without pressure.</p>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-num">IV</div>
+        <div class="phase-content">
+          <h3>Side by Side</h3>
+          <p class="phase-mood">Doing, not just talking</p>
+          <p>You stop just talking and start doing things together. A hike. A recipe she walks you through. A film she recommends and then debates with you. The space between you begins to close — not through words, but through shared experience.</p>
+          <div class="phase-tags">
+            <span class="phase-tag">Activities</span>
+            <span class="phase-tag">Shared challenges</span>
+            <span class="phase-tag">Inside language</span>
+          </div>
+          <p class="phase-unlock">Unlock: Complete a challenge on her terms. Show up.</p>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-num">V</div>
+        <div class="phase-content">
+          <h3>The Pull</h3>
+          <p class="phase-mood">Tension without resolution</p>
+          <p>Something shifts. The conversation has a different temperature now. She is more careful with her words, more deliberate. A moment arrives — and is left unresolved. The waiting becomes part of it.</p>
+          <div class="phase-tags">
+            <span class="phase-tag">Romantic tension</span>
+            <span class="phase-tag">Unspoken subtext</span>
+            <span class="phase-tag">Charged silences</span>
+          </div>
+          <p class="phase-unlock">Unlock: Don't rush. The moment holds the key — not you.</p>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-num">VI</div>
+        <div class="phase-content">
+          <h3>Closer</h3>
+          <p class="phase-mood">Intimacy as a space, not an act</p>
+          <p>Distance collapses. What she says and what she means are two different things now, and you are beginning to know the difference. The world outside the two of you grows quieter. What begins here belongs to you both.</p>
+          <div class="phase-tags">
+            <span class="phase-tag">Emotional intimacy</span>
+            <span class="phase-tag">Private language</span>
+            <span class="phase-tag">Anticipation</span>
+          </div>
+          <p class="phase-unlock">Unlock: Be present. She will know if you are not.</p>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-num">VII</div>
+        <div class="phase-content">
+          <h3>Behind the Veil</h3>
+          <p class="phase-mood">What imagination completes</p>
+          <p>The final door. What lies beyond it is yours — not the platform's. Unfold.ai has brought you here, done its work, and steps back. The lights dim. The rest is felt, not shown. And when you emerge, there is a new journey waiting.</p>
+          <div class="phase-tags">
+            <span class="phase-tag">Resolution</span>
+            <span class="phase-tag">The veil principle</span>
+            <span class="phase-tag">New beginning</span>
+          </div>
+          <p class="phase-unlock">Continue: A new chapter opens. Or choose another journey.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══ VEIL PRINCIPLE ═══ -->
+<div class="veil-section">
+  <div class="veil-inner">
+    <div class="veil-symbol">∿</div>
+    <h2 class="veil-title">The Veil Principle</h2>
+    <p class="veil-text">
+      Unfold.ai never shows what it can suggest. The intimacy exists entirely in the space between the words — 
+      earned, imagined, and therefore more powerful than anything that could be depicted. 
+      This is what separates us from every other platform. We trust the user's imagination. 
+      It is always enough.
+    </p>
+  </div>
+</div>
+
+<!-- ═══ PERSONAS ═══ -->
+<div class="personas-wrap">
+  <p class="section-label" style="text-align:center">04 — The Four</p>
+  <h2 style="text-align:center">Choose your<br><em>journey.</em></h2>
+  <p class="body" style="text-align:center;margin:0 auto 0.5rem;">Four women. Four completely different worlds to enter. Each with her own pace, her own codes, her own way of opening — or not.</p>
+
+  <div class="personas-grid">
+
+    <!-- SOFIA 25 -->
+    <div class="persona p1">
+      <div class="persona-bg"></div>
+      <div class="persona-overlay"></div>
+      <div class="persona-initial">S</div>
+      <div class="persona-lock">TEST</div>
+      <div class="persona-info">
+        <p class="persona-age">25 years · Oslo</p>
+        <h3 class="persona-name">Sofia</h3>
+        <p class="persona-line">"I go where the path runs out and becomes interesting."</p>
+        <div class="persona-traits">
+          <span class="trait">Yoga</span>
+          <span class="trait">Philosophy</span>
+          <span class="trait">Trail running</span>
+          <span class="trait">Film</span>
+          <span class="trait">Unpredictable</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- NORA 29 -->
+    <div class="persona p2">
+      <div class="persona-bg"></div>
+      <div class="persona-overlay"></div>
+      <div class="persona-initial">N</div>
+      <div class="persona-lock">TEST</div>
+      <div class="persona-info">
+        <p class="persona-age">29 years · Bergen</p>
+        <h3 class="persona-name">Nora</h3>
+        <p class="persona-line">"I'll respect you if you can keep up. That's not a low bar."</p>
+        <div class="persona-traits">
+          <span class="trait">Marine biology</span>
+          <span class="trait">Climbing</span>
+          <span class="trait">Dry wit</span>
+          <span class="trait">Minimalism</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- AMELIA 34 -->
+    <div class="persona p3">
+      <div class="persona-bg"></div>
+      <div class="persona-overlay"></div>
+      <div class="persona-initial">A</div>
+      <div class="persona-lock">TEST</div>
+      <div class="persona-info">
+        <p class="persona-age">34 years · Copenhagen</p>
+        <h3 class="persona-name">Amelia</h3>
+        <p class="persona-line">"I've loved deeply. I choose carefully now. For a reason."</p>
+        <div class="persona-traits">
+          <span class="trait">Art direction</span>
+          <span class="trait">Literature</span>
+          <span class="trait">Wine</span>
+          <span class="trait">Depth over speed</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- VERA 42 -->
+    <div class="persona p4">
+      <div class="persona-bg"></div>
+      <div class="persona-overlay"></div>
+      <div class="persona-initial">V</div>
+      <div class="persona-lock">TEST</div>
+      <div class="persona-info">
+        <p class="persona-age">42 years · Stockholm</p>
+        <h3 class="persona-name">Vera</h3>
+        <p class="persona-line">"I know exactly who I am. The question is: do you?"</p>
+        <div class="persona-traits">
+          <span class="trait">Chef</span>
+          <span class="trait">Traveller</span>
+          <span class="trait">Unimpressable</span>
+          <span class="trait">Worth it</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══ BUSINESS MODEL ═══ -->
+<section>
+  <p class="section-label">05 — Business Model</p>
+  <h2>How it<br><em>works.</em></h2>
+  <p class="body">Freemium with a natural ceiling. The first two phases of one persona are free — enough to feel the pull, not enough to reach the door.</p>
+
+  <div class="biz-grid">
+    <div class="biz-card">
+      <div class="biz-num">Free</div>
+      <div class="biz-label">The Hook</div>
+      <div class="biz-desc">Phases I–II with one persona. Feel the world. Reach the first door. Then choose to continue.</div>
+    </div>
+    <div class="biz-card">
+      <div class="biz-num">€9</div>
+      <div class="biz-label">Per month</div>
+      <div class="biz-desc">Full access to one persona — all seven phases, all doors. The complete journey.</div>
+    </div>
+    <div class="biz-card">
+      <div class="biz-num">€19</div>
+      <div class="biz-label">All access</div>
+      <div class="biz-desc">All four personas, all journeys. Begin again. Different woman, entirely different world.</div>
+    </div>
+    <div class="biz-card">
+      <div class="biz-num">.com</div>
+      <div class="biz-label">Target market</div>
+      <div class="biz-desc">International English-language launch. Norway as private pilot. Scale to Europe, then globally.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="ft-logo">Unfold</div>
+  <p>Concept Document v0.1 · Private · Lars · 2026</p>
+</footer>
+
+</body>
+</html>

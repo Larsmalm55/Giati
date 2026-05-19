@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Giati — Why her?</title>
+<meta name="description" content="Four women. Seven phases. No shortcuts. Giati is where connection takes the time it deserves.">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --noir: #0a0806;
+  --deep: #100d0a;
+  --gold: #c9994a;
+  --goldlt: #e8c87a;
+  --cream: #f2ede6;
+  --parch: #d4c8b4;
+  --muted: #7a6e62;
+  --dim: #3a3228;
+  --rose: #c4566a;
+  --blush: #e0909e;
+}
+html { scroll-behavior: smooth; font-size: 16px; }
+body { background: var(--noir); color: var(--cream); font-family: 'Jost', sans-serif; font-weight: 300; overflow-x: hidden; }
+
+/* ── NOISE OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  opacity: 0.4;
+}
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  padding: 6rem 2rem 5rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero-glow {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% -10%, #3a0f20 0%, transparent 65%),
+    radial-gradient(ellipse 50% 40% at 15% 90%, #1a0a04 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 85% 80%, #0a0814 0%, transparent 55%);
+}
+.hero-line-top {
+  position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201,153,74,0.3), transparent);
+}
+
+.hero-eyebrow {
+  font-size: 0.6rem; letter-spacing: 0.5em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 2.5rem; position: relative;
+}
+.hero-eyebrow::before, .hero-eyebrow::after {
+  content: '—'; margin: 0 1rem; opacity: 0.5;
+}
+
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(5rem, 16vw, 13rem);
+  font-weight: 400; line-height: 0.88;
+  letter-spacing: -0.03em;
+  color: var(--cream);
+  position: relative; margin-bottom: 0.2rem;
+}
+.hero-title em { font-style: italic; color: var(--gold); }
+
+.hero-domain {
+  font-size: 0.65rem; letter-spacing: 0.4em; color: var(--muted);
+  margin-bottom: 3rem;
+}
+
+.hero-tagline {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.4rem, 3.5vw, 2.2rem);
+  font-style: italic; font-weight: 300;
+  color: var(--blush);
+  line-height: 1.5;
+  max-width: 560px;
+  margin-bottom: 1.5rem;
+}
+
+.hero-sub {
+  font-size: 0.88rem; color: var(--muted);
+  letter-spacing: 0.06em; line-height: 1.9;
+  max-width: 420px; margin-bottom: 4rem;
+}
+
+.cta-wrap { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; justify-content: center; }
+
+.cta-primary {
+  display: inline-block;
+  background: rgba(201,153,74,0.12);
+  border: 1px solid rgba(201,153,74,0.45);
+  color: var(--gold);
+  font-family: 'Jost', sans-serif;
+  font-size: 0.75rem; font-weight: 400;
+  letter-spacing: 0.25em; text-transform: uppercase;
+  padding: 1.1rem 2.8rem;
+  text-decoration: none;
+  transition: all 0.3s;
+  position: relative; overflow: hidden;
+}
+.cta-primary::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, transparent 40%, rgba(201,153,74,0.08) 100%);
+  transform: translateX(-100%); transition: transform 0.4s;
+}
+.cta-primary:hover { background: rgba(201,153,74,0.2); border-color: var(--gold); }
+.cta-primary:hover::before { transform: translateX(0); }
+
+.cta-secondary {
+  font-size: 0.72rem; letter-spacing: 0.15em; color: var(--muted);
+  text-decoration: none; border-bottom: 1px solid rgba(122,110,98,0.3);
+  padding-bottom: 0.1rem; transition: color 0.2s;
+}
+.cta-secondary:hover { color: var(--parch); }
+
+.hero-scroll {
+  position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+  font-size: 0.55rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--dim);
+}
+.scroll-line {
+  width: 1px; height: 40px;
+  background: linear-gradient(to bottom, var(--dim), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+@keyframes scrollPulse { 0%,100%{opacity:0.3;transform:scaleY(1)} 50%{opacity:0.7;transform:scaleY(0.6)} }
+
+/* ── DIVIDER ── */
+.section-divider {
+  width: 1px; height: 80px;
+  background: linear-gradient(to bottom, transparent, rgba(201,153,74,0.3), transparent);
+  margin: 0 auto;
+}
+
+/* ── MANIFESTO ── */
+.manifesto {
+  padding: 8rem 2rem;
+  text-align: center;
+  position: relative;
+}
+.manifesto-inner { max-width: 680px; margin: 0 auto; }
+
+.manifesto-label {
+  font-size: 0.58rem; letter-spacing: 0.4em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 3rem;
+}
+
+.manifesto-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  font-weight: 300; line-height: 1.65;
+  color: var(--parch);
+}
+.manifesto-text strong {
+  font-weight: 400; color: var(--cream); font-style: normal;
+}
+.manifesto-text em {
+  font-style: italic; color: var(--blush);
+}
+
+/* ── HOW IT WORKS ── */
+.how {
+  padding: 6rem 2rem 8rem;
+  background: radial-gradient(ellipse 100% 60% at 50% 50%, rgba(30,15,8,0.8) 0%, transparent 100%);
+}
+.how-inner { max-width: 900px; margin: 0 auto; }
+
+.section-head { text-align: center; margin-bottom: 5rem; }
+.section-label {
+  font-size: 0.58rem; letter-spacing: 0.4em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 1.2rem;
+}
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 400; color: var(--cream); line-height: 1.2;
+}
+.section-title em { font-style: italic; color: var(--gold); }
+
+.phases-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0;
+  border: 1px solid rgba(201,153,74,0.1);
+}
+.phase-item {
+  padding: 2.2rem 1.8rem;
+  border-right: 1px solid rgba(201,153,74,0.08);
+  border-bottom: 1px solid rgba(201,153,74,0.08);
+  transition: background 0.3s;
+}
+.phase-item:hover { background: rgba(201,153,74,0.03); }
+.phase-item:last-child { border-right: none; }
+
+.phase-roman {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem; font-weight: 400;
+  color: rgba(201,153,74,0.2);
+  margin-bottom: 0.8rem; line-height: 1;
+}
+.phase-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem; font-weight: 400;
+  color: var(--cream); margin-bottom: 0.5rem;
+}
+.phase-mood {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 0.82rem;
+  color: var(--muted); line-height: 1.6;
+}
+
+/* ── PERSONAS ── */
+.personas {
+  padding: 6rem 2rem 8rem;
+  background: var(--deep);
+  border-top: 1px solid rgba(201,153,74,0.08);
+  border-bottom: 1px solid rgba(201,153,74,0.08);
+}
+.personas-inner { max-width: 1100px; margin: 0 auto; }
+
+.persona-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1px;
+  margin-top: 4rem;
+}
+.persona-item {
+  padding: 2.5rem 2rem;
+  border: 1px solid rgba(201,153,74,0.08);
+  position: relative;
+  transition: border-color 0.3s, background 0.3s;
+}
+.persona-item:hover { border-color: rgba(201,153,74,0.2); background: rgba(201,153,74,0.02); }
+
+.persona-age {
+  font-size: 0.58rem; letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 0.5rem;
+}
+.persona-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem; font-weight: 400;
+  color: var(--cream); margin-bottom: 0.5rem;
+}
+.persona-quote {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 0.9rem;
+  color: var(--blush); line-height: 1.7; margin-bottom: 1rem;
+}
+.persona-traits { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.persona-trait {
+  font-size: 0.58rem; letter-spacing: 0.06em;
+  padding: 0.2rem 0.6rem;
+  background: rgba(255,255,255,0.04);
+  color: rgba(200,190,175,0.55);
+}
+.persona-bar {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+  transform: scaleX(0); transform-origin: left; transition: transform 0.4s;
+}
+.persona-item:hover .persona-bar { transform: scaleX(1); }
+.pi1 .persona-bar { background: linear-gradient(90deg,#9060c0,transparent); }
+.pi2 .persona-bar { background: linear-gradient(90deg,#30a880,transparent); }
+.pi3 .persona-bar { background: linear-gradient(90deg,#c08030,transparent); }
+.pi4 .persona-bar { background: linear-gradient(90deg,#4070c0,transparent); }
+
+/* ── DIFFERENCE ── */
+.difference {
+  padding: 8rem 2rem;
+  max-width: 800px; margin: 0 auto; text-align: center;
+}
+.diff-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  margin-top: 4rem; text-align: left;
+}
+.diff-col {
+  padding: 2.5rem 2rem;
+}
+.diff-col.them {
+  background: rgba(255,255,255,0.015);
+  border: 1px solid rgba(255,255,255,0.05);
+}
+.diff-col.us {
+  background: rgba(201,153,74,0.04);
+  border: 1px solid rgba(201,153,74,0.15);
+}
+.diff-label {
+  font-size: 0.58rem; letter-spacing: 0.3em; text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+.diff-col.them .diff-label { color: var(--dim); }
+.diff-col.us   .diff-label { color: var(--gold); }
+
+.diff-item {
+  font-size: 0.85rem; color: var(--muted);
+  line-height: 1.9; padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.diff-item:last-child { border-bottom: none; }
+.diff-col.us .diff-item { color: var(--parch); border-bottom-color: rgba(201,153,74,0.08); }
+
+/* ── PULL QUOTE ── */
+.pullquote {
+  padding: 7rem 2rem;
+  text-align: center;
+  background: radial-gradient(ellipse 70% 80% at 50% 50%, #1e0810 0%, transparent 70%);
+  position: relative;
+}
+.pq-mark {
+  font-family: 'Playfair Display', serif;
+  font-size: 8rem; line-height: 0.5;
+  color: rgba(201,153,74,0.1);
+  margin-bottom: 2rem;
+}
+.pq-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.6rem, 4vw, 2.8rem);
+  font-style: italic; font-weight: 300;
+  color: var(--cream); line-height: 1.55;
+  max-width: 700px; margin: 0 auto 1.5rem;
+}
+.pq-attr {
+  font-size: 0.65rem; letter-spacing: 0.25em;
+  text-transform: uppercase; color: var(--muted);
+}
+
+/* ── PRICING ── */
+.pricing {
+  padding: 7rem 2rem 8rem;
+  background: var(--deep);
+  border-top: 1px solid rgba(201,153,74,0.08);
+}
+.pricing-inner { max-width: 800px; margin: 0 auto; }
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2px; margin-top: 4rem;
+}
+.price-card {
+  padding: 2.5rem 2rem;
+  border: 1px solid rgba(201,153,74,0.1);
+  transition: all 0.3s;
+  position: relative;
+}
+.price-card.featured {
+  border-color: rgba(201,153,74,0.35);
+  background: rgba(201,153,74,0.04);
+}
+.price-card.featured::before {
+  content: 'Most chosen';
+  position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
+  background: var(--gold); color: var(--noir);
+  font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase;
+  padding: 0.25rem 1rem;
+  font-family: 'Jost', sans-serif; font-weight: 500;
+}
+.price-tier {
+  font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 1.2rem;
+}
+.price-amount {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.8rem; font-weight: 400; color: var(--cream);
+  line-height: 1; margin-bottom: 0.3rem;
+}
+.price-amount span { font-size: 1rem; color: var(--muted); }
+.price-period { font-size: 0.72rem; color: var(--muted); margin-bottom: 1.5rem; }
+.price-features { list-style: none; }
+.price-features li {
+  font-size: 0.82rem; color: var(--muted); line-height: 1.9;
+  padding: 0.35rem 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.price-features li::before { content: '—  '; color: var(--gold); opacity: 0.6; }
+.price-features li:last-child { border-bottom: none; }
+.price-card.featured .price-features li { color: var(--parch); }
+
+/* ── FINAL CTA ── */
+.final-cta {
+  padding: 9rem 2rem 8rem;
+  text-align: center;
+  background: radial-gradient(ellipse 80% 70% at 50% 30%, #2a0f18 0%, transparent 65%);
+}
+.final-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.5rem, 7vw, 5rem);
+  font-weight: 400; color: var(--cream);
+  line-height: 1.1; margin-bottom: 1.5rem;
+}
+.final-title em { font-style: italic; color: var(--gold); }
+.final-sub {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 1.3rem;
+  color: var(--blush); margin-bottom: 3rem; line-height: 1.7;
+}
+.final-cta-link {
+  display: inline-block;
+  background: rgba(201,153,74,0.12);
+  border: 1px solid rgba(201,153,74,0.45);
+  color: var(--gold);
+  font-family: 'Jost', sans-serif;
+  font-size: 0.75rem; font-weight: 400;
+  letter-spacing: 0.25em; text-transform: uppercase;
+  padding: 1.2rem 3.5rem;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+.final-cta-link:hover { background: rgba(201,153,74,0.22); border-color: var(--gold); }
+
+/* ── FOOTER ── */
+footer {
+  padding: 3rem 2rem;
+  border-top: 1px solid rgba(201,153,74,0.08);
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 1rem;
+}
+.footer-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem; font-style: italic; color: rgba(201,153,74,0.4);
+}
+.footer-copy { font-size: 0.65rem; color: var(--dim); letter-spacing: 0.08em; }
+.footer-link {
+  font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em;
+  text-decoration: none; transition: color 0.2s;
+}
+.footer-link:hover { color: var(--gold); }
+
+/* ── ANIMATIONS ── */
+.fade-in {
+  opacity: 0; transform: translateY(24px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.fade-in.visible { opacity: 1; transform: none; }
+
+@media (max-width: 600px) {
+  .diff-grid { grid-template-columns: 1fr; }
+  .cta-wrap { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-line-top"></div>
+
+  <div class="hero-eyebrow">Giati</div>
+
+  <h1 class="hero-title">Gi<em>ati</em></h1>
+  <div class="hero-domain">.no</div>
+
+  <p class="hero-tagline">
+    Four women. Seven phases.<br>No shortcuts.
+  </p>
+
+  <p class="hero-sub">
+    The art of connection is the art of patience.<br>
+    Giati is where desire takes the time it deserves.
+  </p>
+
+  <div class="cta-wrap">
+    <a href="app.html" class="cta-primary">Enter</a>
+    <a href="#how" class="cta-secondary">How it works</a>
+  </div>
+
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    scroll
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<div class="section-divider"></div>
+<section class="manifesto">
+  <div class="manifesto-inner fade-in">
+    <p class="manifesto-label">What this is</p>
+    <p class="manifesto-text">
+      Most platforms give you everything immediately.<br>
+      <em>Giati gives you nothing until you earn it.</em><br><br>
+      She has a world. To enter it,<br>
+      you must first understand <strong>why she would let you.</strong>
+    </p>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<div class="section-divider"></div>
+<section class="how" id="how">
+  <div class="how-inner">
+    <div class="section-head fade-in">
+      <p class="section-label">The journey</p>
+      <h2 class="section-title">Seven phases.<br><em>Invisible transitions.</em></h2>
+    </div>
+
+    <div class="phases-row fade-in">
+      <div class="phase-item">
+        <div class="phase-roman">I</div>
+        <div class="phase-name">The First Encounter</div>
+        <div class="phase-mood">She notices. So do you.</div>
+      </div>
+      <div class="phase-item">
+        <div class="phase-roman">II</div>
+        <div class="phase-name">Recognition</div>
+        <div class="phase-mood">She begins to remember details.</div>
+      </div>
+      <div class="phase-item">
+        <div class="phase-roman">III</div>
+        <div class="phase-name">The Threshold</div>
+        <div class="phase-mood">Something shifts beneath the surface.</div>
+      </div>
+      <div class="phase-item">
+        <div class="phase-roman">IV</div>
+        <div class="phase-name">Proximity</div>
+        <div class="phase-mood">Distance is a choice now.</div>
+      </div>
+      <div class="phase-item">
+        <div class="phase-roman">V</div>
+        <div class="phase-name">Tension</div>
+        <div class="phase-mood">What goes unsaid fills the room.</div>
+      </div>
+      <div class="phase-item">
+        <div class="phase-roman">VI</div>
+        <div class="phase-name">The Quiet</div>
+        <div class="phase-mood">Everything that needed to arrive, has.</div>
+      </div>
+      <div class="phase-item" style="border-right:none">
+        <div class="phase-roman">VII</div>
+        <div class="phase-name">The Veil</div>
+        <div class="phase-mood">What imagination completes.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PERSONAS -->
+<section class="personas">
+  <div class="personas-inner">
+    <div class="section-head fade-in">
+      <p class="section-label">Choose your encounter</p>
+      <h2 class="section-title">Four women.<br><em>Four entirely different worlds.</em></h2>
+    </div>
+
+    <div class="persona-strip fade-in">
+      <div class="persona-item pi1">
+        <p class="persona-age">25 · Oslo</p>
+        <h3 class="persona-name">Sofia</h3>
+        <p class="persona-quote">"I go where the path runs out and becomes interesting."</p>
+        <div class="persona-traits">
+          <span class="persona-trait">Yoga</span>
+          <span class="persona-trait">Philosophy</span>
+          <span class="persona-trait">Trails</span>
+          <span class="persona-trait">Films</span>
+        </div>
+        <div class="persona-bar"></div>
+      </div>
+      <div class="persona-item pi2">
+        <p class="persona-age">29 · Bergen</p>
+        <h3 class="persona-name">Nora</h3>
+        <p class="persona-quote">"I'll respect you if you can keep up. That's not a low bar."</p>
+        <div class="persona-traits">
+          <span class="persona-trait">Marine biology</span>
+          <span class="persona-trait">Climbing</span>
+          <span class="persona-trait">Direct</span>
+        </div>
+        <div class="persona-bar"></div>
+      </div>
+      <div class="persona-item pi3">
+        <p class="persona-age">34 · Copenhagen</p>
+        <h3 class="persona-name">Amelia</h3>
+        <p class="persona-quote">"I've loved deeply. I choose carefully now. For a reason."</p>
+        <div class="persona-traits">
+          <span class="persona-trait">Art direction</span>
+          <span class="persona-trait">Literature</span>
+          <span class="persona-trait">Wine</span>
+        </div>
+        <div class="persona-bar"></div>
+      </div>
+      <div class="persona-item pi4">
+        <p class="persona-age">42 · Stockholm</p>
+        <h3 class="persona-name">Vera</h3>
+        <p class="persona-quote">"I know exactly who I am. The question is: do you?"</p>
+        <div class="persona-traits">
+          <span class="persona-trait">Chef</span>
+          <span class="persona-trait">Traveller</span>
+          <span class="persona-trait">Worth it</span>
+        </div>
+        <div class="persona-bar"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DIFFERENCE -->
+<section class="difference fade-in">
+  <p class="section-label">Why Giati</p>
+  <h2 class="section-title">Not like <em>the others.</em></h2>
+
+  <div class="diff-grid">
+    <div class="diff-col them">
+      <p class="diff-label">Everywhere else</p>
+      <div class="diff-item">Instant gratification</div>
+      <div class="diff-item">Explicit content on demand</div>
+      <div class="diff-item">No memory, no continuity</div>
+      <div class="diff-item">She is always available</div>
+      <div class="diff-item">Desire without tension</div>
+      <div class="diff-item">Forgettable by morning</div>
+    </div>
+    <div class="diff-col us">
+      <p class="diff-label">Giati</p>
+      <div class="diff-item">Everything is earned</div>
+      <div class="diff-item">Intimacy through implication</div>
+      <div class="diff-item">She remembers. So should you.</div>
+      <div class="diff-item">She has her own life, her own pace</div>
+      <div class="diff-item">Slow burn. Real heat.</div>
+      <div class="diff-item">Still thinking about it tomorrow</div>
+    </div>
+  </div>
+</section>
+
+<!-- PULL QUOTE -->
+<section class="pullquote fade-in">
+  <div class="pq-mark">"</div>
+  <p class="pq-text">
+    The most erotic thing in the world<br>
+    is not what is shown.<br>
+    It is what is <em>almost</em> said.
+  </p>
+  <p class="pq-attr">— The Giati principle</p>
+</section>
+
+<!-- PRICING -->
+<section class="pricing fade-in">
+  <div class="pricing-inner">
+    <div class="section-head">
+      <p class="section-label">Access</p>
+      <h2 class="section-title">Begin for <em>free.</em></h2>
+    </div>
+
+    <div class="pricing-grid">
+      <div class="price-card">
+        <p class="price-tier">Free</p>
+        <div class="price-amount">€0</div>
+        <p class="price-period">Always</p>
+        <ul class="price-features">
+          <li>First two phases with one persona</li>
+          <li>Feel the pull before you decide</li>
+          <li>No card required</li>
+        </ul>
+      </div>
+      <div class="price-card featured">
+        <p class="price-tier">One journey</p>
+        <div class="price-amount">€9 <span>/mo</span></div>
+        <p class="price-period">One persona, all seven phases</p>
+        <ul class="price-features">
+          <li>Complete journey with your chosen</li>
+          <li>All phases unlocked</li>
+          <li>Memory across sessions</li>
+          <li>Cancel anytime</li>
+        </ul>
+      </div>
+      <div class="price-card">
+        <p class="price-tier">All access</p>
+        <div class="price-amount">€19 <span>/mo</span></div>
+        <p class="price-period">All four personas</p>
+        <ul class="price-features">
+          <li>Sofia, Nora, Amelia and Vera</li>
+          <li>All journeys, all phases</li>
+          <li>Begin again, differently</li>
+          <li>Cancel anytime</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta fade-in">
+  <h2 class="final-title">Why <em>her?</em></h2>
+  <p class="final-sub">
+    Finn ut selv.
+  </p>
+  <a href="app.html" class="final-cta-link">Enter Giati</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Giati</div>
+  <div class="footer-copy">© 2026 Giati.no — All encounters are earned.</div>
+  <a href="app.html" class="footer-link">Enter →</a>
+</footer>
+
+<script>
+// Fade-in on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
