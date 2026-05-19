@@ -8,6 +8,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
 <style>
 
+
+
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
   --noir: #080604; --deep: #0e0b08;
@@ -473,14 +476,416 @@ html,body{height:100%;background:var(--noir);color:var(--cream);font-family:'Jos
 }
 .enter-overlay.fading { opacity: 1; pointer-events: all; }
 
+
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --noir:#0d0a08;--deep:#131010;--card:#1a1412;
+  --border:rgba(201,153,74,0.15);--gold:#c9994a;
+  --cream:#f2ede6;--parch:#cfc4b4;--muted:#7a6e64;--blush:#e8a0a8;
+}
+html,body{height:100%;background:var(--noir);color:var(--cream);font-family:'Jost',sans-serif;font-weight:300;}
+
+#modal-key{position:fixed;inset:0;z-index:200;background:var(--noir);display:flex;align-items:center;justify-content:center;}
+#modal-key.hidden{display:none;}
+.key-box{width:380px;padding:3rem 2.5rem;border:1px solid rgba(201,153,74,0.25);background:var(--deep);text-align:center;}
+.key-logo{font-family:'Playfair Display',serif;font-size:2.6rem;font-weight:400;}
+.key-logo em{font-style:italic;color:var(--gold);}
+.key-tld{font-size:.62rem;letter-spacing:.3em;color:var(--muted);margin-bottom:2rem;}
+.key-label{font-size:.82rem;color:var(--parch);margin-bottom:1.2rem;line-height:1.75;}
+.key-input{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(201,153,74,.2);color:var(--cream);font-family:'Jost',sans-serif;font-size:.9rem;padding:.8rem 1rem;outline:none;margin-bottom:1rem;border-radius:2px;display:block;}
+.key-input:focus{border-color:rgba(201,153,74,.5);}
+.key-input::placeholder{color:var(--muted);}
+.key-btn{width:100%;background:rgba(201,153,74,.12);border:1px solid rgba(201,153,74,.35);color:var(--gold);font-family:'Jost',sans-serif;font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;padding:.8rem;cursor:pointer;transition:all .2s;}
+.key-btn:hover{background:rgba(201,153,74,.22);}
+.key-err{font-size:.72rem;color:#e07070;margin-top:.7rem;display:none;}
+.key-hint{font-size:.65rem;color:var(--muted);margin-top:1rem;line-height:1.75;}
+.key-hint a{color:rgba(201,153,74,.5);text-decoration:none;}
+
+#screen-select{display:none;position:absolute;inset:0;overflow-y:auto;}
+#screen-chat{display:none;position:absolute;inset:0;flex-direction:column;}
+#screen-select.on{display:block;}
+#screen-chat.on{display:flex;}
+
+.sel-header{text-align:center;padding:3.5rem 2rem 2rem;background:radial-gradient(ellipse 70% 55% at 50% 0%,#2a0f18 0%,transparent 70%);}
+.sel-logo{font-family:'Playfair Display',serif;font-size:3rem;font-weight:400;}
+.sel-logo em{font-style:italic;color:var(--gold);}
+.sel-tld{font-size:.62rem;letter-spacing:.3em;color:var(--muted);margin-bottom:.8rem;}
+.sel-tag{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.2rem;color:var(--blush);}
+.divider{width:50px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:2rem auto;}
+.change-key{background:none;border:none;font-family:'Jost',sans-serif;font-size:.6rem;letter-spacing:.15em;color:rgba(122,110,100,.35);cursor:pointer;text-transform:uppercase;padding:.3rem .8rem;display:block;margin:.5rem auto 0;}
+
+.row1{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;padding:0 2px 0;max-width:1100px;margin:0 auto;width:100%;}
+.row2{display:flex;justify-content:center;padding:2px 2px 4rem;max-width:1100px;margin:0 auto;width:100%;}
+.row2 .pcard{width:25%;min-width:220px;}
+
+.pcard{position:relative;height:440px;cursor:pointer;overflow:hidden;}
+.pcard:hover .pphoto img{transform:scale(1.13);}
+.pphoto{position:absolute;inset:0;overflow:hidden;}
+.pphoto img{width:100%;height:100%;object-fit:cover;object-position:center 15%;display:block;transform:scale(1.08);transform-origin:center 20%;transition:transform .8s ease;}
+.povlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.92) 0%,rgba(0,0,0,.12) 55%,transparent 100%);}
+.pbadge{position:absolute;top:1.2rem;right:1.2rem;font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,153,74,.3);padding:.25rem .7rem;}
+.pinfo{position:absolute;bottom:0;left:0;right:0;padding:1.5rem 1.6rem 1.8rem;}
+.page{font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:.35rem;}
+.pname{font-family:'Playfair Display',serif;font-size:2rem;font-weight:400;margin-bottom:.35rem;}
+.pquote{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:var(--blush);line-height:1.65;margin-bottom:.8rem;}
+.ptraits{display:flex;flex-wrap:wrap;gap:.35rem;}
+.ptrait{font-size:.6rem;letter-spacing:.06em;padding:.22rem .65rem;background:rgba(255,255,255,.07);color:var(--parch);}
+.pbar{position:absolute;bottom:0;left:0;right:0;height:3px;transform:scaleX(0);transform-origin:left;transition:transform .4s;}
+.pcard:hover .pbar{transform:scaleX(1);}
+.p1 .pbar{background:linear-gradient(90deg,#9060c0,transparent);}
+.p2 .pbar{background:linear-gradient(90deg,#30a880,transparent);}
+.p3 .pbar{background:linear-gradient(90deg,#c08030,transparent);}
+.p4 .pbar{background:linear-gradient(90deg,#4070c0,transparent);}
+.p5 .pbar{background:linear-gradient(90deg,#c08840,transparent);}
+
+.chat-hdr{flex-shrink:0;display:flex;align-items:center;gap:1rem;padding:.85rem 1.4rem;background:var(--deep);border-bottom:1px solid var(--border);}
+.back-btn{background:none;border:1px solid var(--border);color:var(--muted);cursor:pointer;padding:.35rem .9rem;font-family:'Jost',sans-serif;font-size:.72rem;letter-spacing:.1em;transition:all .2s;}
+.back-btn:hover{color:var(--gold);border-color:var(--gold);}
+.home-link{font-family:'Jost',sans-serif;font-size:.68rem;letter-spacing:.1em;color:var(--muted);text-decoration:none;transition:color .2s;}
+.home-link:hover{color:var(--gold);}
+.hdr-name{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:400;}
+.hdr-loc{font-size:.7rem;color:var(--muted);letter-spacing:.08em;}
+.phase-hdr{margin-left:auto;text-align:right;}
+.phase-hdr-n{font-size:.55rem;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);}
+.phase-hdr-name{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.92rem;color:var(--gold);}
+
+.chat-body{flex:1;display:flex;overflow:hidden;}
+.messages-col{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;}
+.messages-wrap{flex:1;overflow-y:auto;padding:1.3rem 1.2rem .5rem;display:flex;flex-direction:column;gap:1rem;scroll-behavior:smooth;}
+.messages-wrap::-webkit-scrollbar{width:3px;}
+.messages-wrap::-webkit-scrollbar-thumb{background:rgba(201,153,74,.18);}
+
+.input-area{flex-shrink:0;display:flex;gap:.7rem;align-items:flex-end;padding:.9rem 1.2rem;background:var(--deep);border-top:1px solid var(--border);}
+.msg-input{flex:1;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--cream);font-family:'Jost',sans-serif;font-size:1.1rem;font-weight:300;padding:.7rem 1rem;resize:none;min-height:46px;max-height:120px;line-height:1.55;outline:none;transition:border-color .2s;border-radius:3px;}
+.msg-input:focus{border-color:rgba(201,153,74,.4);}
+.msg-input::placeholder{color:var(--muted);}
+.send-btn{background:rgba(201,153,74,.12);border:1px solid rgba(201,153,74,.3);color:var(--gold);cursor:pointer;padding:0 1.2rem;height:46px;font-family:'Jost',sans-serif;font-size:1rem;transition:all .2s;border-radius:3px;white-space:nowrap;}
+.send-btn:hover{background:rgba(201,153,74,.22);}
+.send-btn:disabled{opacity:.35;cursor:default;}
+
+.msg{display:flex;gap:.7rem;max-width:86%;animation:fadeUp .28s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.msg.user{align-self:flex-end;flex-direction:row-reverse;}
+.msg.ai{align-self:flex-start;}
+.msg-av{width:32px;height:32px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:.88rem;font-style:italic;margin-top:3px;}
+.msg-bubble{padding:.85rem 1.15rem;line-height:1.78;font-size:1.1rem;}
+.msg.ai .msg-bubble{background:var(--card);border:1px solid var(--border);color:var(--parch);border-radius:2px 16px 16px 16px;}
+.msg.user .msg-bubble{background:rgba(201,153,74,.1);border:1px solid rgba(201,153,74,.18);color:var(--cream);border-radius:16px 2px 16px 16px;}
+.sys-msg{text-align:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:rgba(201,153,74,.42);padding:.2rem 0;}
+.typing-ind{display:flex;gap:4px;padding:.35rem 0;}
+.typing-ind span{width:6px;height:6px;border-radius:50%;background:var(--gold);opacity:.4;animation:bounce 1.2s infinite;}
+.typing-ind span:nth-child(2){animation-delay:.18s;}
+.typing-ind span:nth-child(3){animation-delay:.36s;}
+@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px);opacity:.8}}
+
+.persona-panel{width:258px;flex-shrink:0;border-left:1px solid var(--border);background:var(--deep);display:flex;flex-direction:column;overflow-y:auto;}
+.persona-panel::-webkit-scrollbar{width:0;}
+.portrait-wrap{width:100%;aspect-ratio:3/4;overflow:hidden;flex-shrink:0;}
+.portrait-wrap img{width:100%;height:100%;object-fit:cover;object-position:center 15%;display:block;transform:scale(1.08);transform-origin:center 20%;}
+.portrait-wrap svg{width:100%;height:100%;display:block;}
+.panel-bio{padding:1.4rem 1.4rem 2rem;flex:1;}
+.panel-name{font-family:'Playfair Display',serif;font-size:1.55rem;font-weight:400;color:var(--cream);margin-bottom:.15rem;}
+.panel-loc{font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:.9rem;}
+.panel-quote{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:var(--blush);line-height:1.65;border-left:2px solid rgba(201,153,74,.22);padding-left:.85rem;margin-bottom:1rem;}
+.panel-desc{font-size:.82rem;color:var(--muted);line-height:1.9;margin-bottom:1rem;}
+.panel-traits{display:flex;flex-wrap:wrap;gap:.32rem;}
+.panel-trait{font-size:.6rem;letter-spacing:.06em;padding:.2rem .6rem;background:rgba(255,255,255,.05);color:rgba(210,200,185,.55);}
+
+.veil-screen{display:none;position:absolute;inset:0;z-index:10;background:radial-gradient(ellipse at center,#2c0f18 0%,#0d0a08 70%);align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:2rem;}
+.veil-screen.visible{display:flex;}
+.veil-symbol{font-family:'Playfair Display',serif;font-size:5rem;color:rgba(201,153,74,.18);margin-bottom:1.5rem;}
+.veil-title{font-family:'Playfair Display',serif;font-size:2.2rem;font-style:italic;color:var(--cream);margin-bottom:1rem;}
+.veil-text{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:300;color:var(--blush);line-height:2;max-width:460px;margin-bottom:2rem;}
+.veil-back{background:none;border:1px solid rgba(201,153,74,.35);color:var(--gold);cursor:pointer;padding:.65rem 2rem;font-family:'Jost',sans-serif;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;transition:all .2s;}
+.veil-back:hover{background:rgba(201,153,74,.08);}
+@media(max-width:640px){.persona-panel{display:none;}.row1{grid-template-columns:repeat(2,1fr);}}
+
+
+/* ── COMBINED LAYOUT ── */
+#landing-screen { display: block; }
+#landing-screen.hidden { display: none; }
+#app-wrapper { display: none; position: fixed; inset: 0; }
+#app-wrapper.visible { display: block; }
+.enter-overlay { position: fixed; inset: 0; z-index: 500; background: #080604; opacity: 0; pointer-events: none; transition: opacity 0.6s ease; }
+.enter-overlay.fading { opacity: 1; pointer-events: all; }
+
+
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --noir:#0d0a08;--deep:#131010;--card:#1a1412;
+  --border:rgba(201,153,74,0.15);--gold:#c9994a;
+  --cream:#f2ede6;--parch:#cfc4b4;--muted:#7a6e64;--blush:#e8a0a8;
+}
+html,body{height:100%;background:var(--noir);color:var(--cream);font-family:'Jost',sans-serif;font-weight:300;}
+
+#modal-key{position:fixed;inset:0;z-index:200;background:var(--noir);display:flex;align-items:center;justify-content:center;}
+#modal-key.hidden{display:none;}
+.key-box{width:380px;padding:3rem 2.5rem;border:1px solid rgba(201,153,74,0.25);background:var(--deep);text-align:center;}
+.key-logo{font-family:'Playfair Display',serif;font-size:2.6rem;font-weight:400;}
+.key-logo em{font-style:italic;color:var(--gold);}
+.key-tld{font-size:.62rem;letter-spacing:.3em;color:var(--muted);margin-bottom:2rem;}
+.key-label{font-size:.82rem;color:var(--parch);margin-bottom:1.2rem;line-height:1.75;}
+.key-input{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(201,153,74,.2);color:var(--cream);font-family:'Jost',sans-serif;font-size:.9rem;padding:.8rem 1rem;outline:none;margin-bottom:1rem;border-radius:2px;display:block;}
+.key-input:focus{border-color:rgba(201,153,74,.5);}
+.key-input::placeholder{color:var(--muted);}
+.key-btn{width:100%;background:rgba(201,153,74,.12);border:1px solid rgba(201,153,74,.35);color:var(--gold);font-family:'Jost',sans-serif;font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;padding:.8rem;cursor:pointer;transition:all .2s;}
+.key-btn:hover{background:rgba(201,153,74,.22);}
+.key-err{font-size:.72rem;color:#e07070;margin-top:.7rem;display:none;}
+.key-hint{font-size:.65rem;color:var(--muted);margin-top:1rem;line-height:1.75;}
+.key-hint a{color:rgba(201,153,74,.5);text-decoration:none;}
+
+#screen-select{display:none;position:absolute;inset:0;overflow-y:auto;}
+#screen-chat{display:none;position:absolute;inset:0;flex-direction:column;}
+#screen-select.on{display:block;}
+#screen-chat.on{display:flex;}
+
+.sel-header{text-align:center;padding:3.5rem 2rem 2rem;background:radial-gradient(ellipse 70% 55% at 50% 0%,#2a0f18 0%,transparent 70%);}
+.sel-logo{font-family:'Playfair Display',serif;font-size:3rem;font-weight:400;}
+.sel-logo em{font-style:italic;color:var(--gold);}
+.sel-tld{font-size:.62rem;letter-spacing:.3em;color:var(--muted);margin-bottom:.8rem;}
+.sel-tag{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.2rem;color:var(--blush);}
+.divider{width:50px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:2rem auto;}
+.change-key{background:none;border:none;font-family:'Jost',sans-serif;font-size:.6rem;letter-spacing:.15em;color:rgba(122,110,100,.35);cursor:pointer;text-transform:uppercase;padding:.3rem .8rem;display:block;margin:.5rem auto 0;}
+
+.row1{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;padding:0 2px 0;max-width:1100px;margin:0 auto;width:100%;}
+.row2{display:flex;justify-content:center;padding:2px 2px 4rem;max-width:1100px;margin:0 auto;width:100%;}
+.row2 .pcard{width:25%;min-width:220px;}
+
+.pcard{position:relative;height:440px;cursor:pointer;overflow:hidden;}
+.pcard:hover .pphoto img{transform:scale(1.13);}
+.pphoto{position:absolute;inset:0;overflow:hidden;}
+.pphoto img{width:100%;height:100%;object-fit:cover;object-position:center 15%;display:block;transform:scale(1.08);transform-origin:center 20%;transition:transform .8s ease;}
+.povlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.92) 0%,rgba(0,0,0,.12) 55%,transparent 100%);}
+.pbadge{position:absolute;top:1.2rem;right:1.2rem;font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,153,74,.3);padding:.25rem .7rem;}
+.pinfo{position:absolute;bottom:0;left:0;right:0;padding:1.5rem 1.6rem 1.8rem;}
+.page{font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:.35rem;}
+.pname{font-family:'Playfair Display',serif;font-size:2rem;font-weight:400;margin-bottom:.35rem;}
+.pquote{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:var(--blush);line-height:1.65;margin-bottom:.8rem;}
+.ptraits{display:flex;flex-wrap:wrap;gap:.35rem;}
+.ptrait{font-size:.6rem;letter-spacing:.06em;padding:.22rem .65rem;background:rgba(255,255,255,.07);color:var(--parch);}
+.pbar{position:absolute;bottom:0;left:0;right:0;height:3px;transform:scaleX(0);transform-origin:left;transition:transform .4s;}
+.pcard:hover .pbar{transform:scaleX(1);}
+.p1 .pbar{background:linear-gradient(90deg,#9060c0,transparent);}
+.p2 .pbar{background:linear-gradient(90deg,#30a880,transparent);}
+.p3 .pbar{background:linear-gradient(90deg,#c08030,transparent);}
+.p4 .pbar{background:linear-gradient(90deg,#4070c0,transparent);}
+.p5 .pbar{background:linear-gradient(90deg,#c08840,transparent);}
+
+.chat-hdr{flex-shrink:0;display:flex;align-items:center;gap:1rem;padding:.85rem 1.4rem;background:var(--deep);border-bottom:1px solid var(--border);}
+.back-btn{background:none;border:1px solid var(--border);color:var(--muted);cursor:pointer;padding:.35rem .9rem;font-family:'Jost',sans-serif;font-size:.72rem;letter-spacing:.1em;transition:all .2s;}
+.back-btn:hover{color:var(--gold);border-color:var(--gold);}
+.home-link{font-family:'Jost',sans-serif;font-size:.68rem;letter-spacing:.1em;color:var(--muted);text-decoration:none;transition:color .2s;}
+.home-link:hover{color:var(--gold);}
+.hdr-name{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:400;}
+.hdr-loc{font-size:.7rem;color:var(--muted);letter-spacing:.08em;}
+.phase-hdr{margin-left:auto;text-align:right;}
+.phase-hdr-n{font-size:.55rem;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);}
+.phase-hdr-name{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.92rem;color:var(--gold);}
+
+.chat-body{flex:1;display:flex;overflow:hidden;}
+.messages-col{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;}
+.messages-wrap{flex:1;overflow-y:auto;padding:1.3rem 1.2rem .5rem;display:flex;flex-direction:column;gap:1rem;scroll-behavior:smooth;}
+.messages-wrap::-webkit-scrollbar{width:3px;}
+.messages-wrap::-webkit-scrollbar-thumb{background:rgba(201,153,74,.18);}
+
+.input-area{flex-shrink:0;display:flex;gap:.7rem;align-items:flex-end;padding:.9rem 1.2rem;background:var(--deep);border-top:1px solid var(--border);}
+.msg-input{flex:1;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--cream);font-family:'Jost',sans-serif;font-size:1.1rem;font-weight:300;padding:.7rem 1rem;resize:none;min-height:46px;max-height:120px;line-height:1.55;outline:none;transition:border-color .2s;border-radius:3px;}
+.msg-input:focus{border-color:rgba(201,153,74,.4);}
+.msg-input::placeholder{color:var(--muted);}
+.send-btn{background:rgba(201,153,74,.12);border:1px solid rgba(201,153,74,.3);color:var(--gold);cursor:pointer;padding:0 1.2rem;height:46px;font-family:'Jost',sans-serif;font-size:1rem;transition:all .2s;border-radius:3px;white-space:nowrap;}
+.send-btn:hover{background:rgba(201,153,74,.22);}
+.send-btn:disabled{opacity:.35;cursor:default;}
+
+.msg{display:flex;gap:.7rem;max-width:86%;animation:fadeUp .28s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.msg.user{align-self:flex-end;flex-direction:row-reverse;}
+.msg.ai{align-self:flex-start;}
+.msg-av{width:32px;height:32px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:.88rem;font-style:italic;margin-top:3px;}
+.msg-bubble{padding:.85rem 1.15rem;line-height:1.78;font-size:1.1rem;}
+.msg.ai .msg-bubble{background:var(--card);border:1px solid var(--border);color:var(--parch);border-radius:2px 16px 16px 16px;}
+.msg.user .msg-bubble{background:rgba(201,153,74,.1);border:1px solid rgba(201,153,74,.18);color:var(--cream);border-radius:16px 2px 16px 16px;}
+.sys-msg{text-align:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:rgba(201,153,74,.42);padding:.2rem 0;}
+.typing-ind{display:flex;gap:4px;padding:.35rem 0;}
+.typing-ind span{width:6px;height:6px;border-radius:50%;background:var(--gold);opacity:.4;animation:bounce 1.2s infinite;}
+.typing-ind span:nth-child(2){animation-delay:.18s;}
+.typing-ind span:nth-child(3){animation-delay:.36s;}
+@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px);opacity:.8}}
+
+.persona-panel{width:258px;flex-shrink:0;border-left:1px solid var(--border);background:var(--deep);display:flex;flex-direction:column;overflow-y:auto;}
+.persona-panel::-webkit-scrollbar{width:0;}
+.portrait-wrap{width:100%;aspect-ratio:3/4;overflow:hidden;flex-shrink:0;}
+.portrait-wrap img{width:100%;height:100%;object-fit:cover;object-position:center 15%;display:block;transform:scale(1.08);transform-origin:center 20%;}
+.portrait-wrap svg{width:100%;height:100%;display:block;}
+.panel-bio{padding:1.4rem 1.4rem 2rem;flex:1;}
+.panel-name{font-family:'Playfair Display',serif;font-size:1.55rem;font-weight:400;color:var(--cream);margin-bottom:.15rem;}
+.panel-loc{font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:.9rem;}
+.panel-quote{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:var(--blush);line-height:1.65;border-left:2px solid rgba(201,153,74,.22);padding-left:.85rem;margin-bottom:1rem;}
+.panel-desc{font-size:.82rem;color:var(--muted);line-height:1.9;margin-bottom:1rem;}
+.panel-traits{display:flex;flex-wrap:wrap;gap:.32rem;}
+.panel-video{display:block;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(201,153,74,0.1);font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(201,153,74,0.45);text-decoration:none;transition:color .2s;}
+.panel-video:hover{color:var(--gold);}
+.panel-video::before{content:'▶  ';}
+.panel-trait{font-size:.6rem;letter-spacing:.06em;padding:.2rem .6rem;background:rgba(255,255,255,.05);color:rgba(210,200,185,.55);}
+
+.veil-screen{display:none;position:absolute;inset:0;z-index:10;background:radial-gradient(ellipse at center,#2c0f18 0%,#0d0a08 70%);align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:2rem;}
+.veil-screen.visible{display:flex;}
+.veil-symbol{font-family:'Playfair Display',serif;font-size:5rem;color:rgba(201,153,74,.18);margin-bottom:1.5rem;}
+.veil-title{font-family:'Playfair Display',serif;font-size:2.2rem;font-style:italic;color:var(--cream);margin-bottom:1rem;}
+.veil-text{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:300;color:var(--blush);line-height:2;max-width:460px;margin-bottom:2rem;}
+.veil-back{background:none;border:1px solid rgba(201,153,74,.35);color:var(--gold);cursor:pointer;padding:.65rem 2rem;font-family:'Jost',sans-serif;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;transition:all .2s;}
+.veil-back:hover{background:rgba(201,153,74,.08);}
+@media(max-width:640px){.persona-panel{display:none;}.row1{grid-template-columns:repeat(2,1fr);}}
+
+
+#landing-screen{display:block;}
+#landing-screen.hidden{display:none;}
+#app-wrapper{display:none;position:fixed;inset:0;}
+#app-wrapper.visible{display:block;}
+.enter-overlay{position:fixed;inset:0;z-index:500;background:#080604;opacity:0;pointer-events:none;transition:opacity 0.6s ease;}
+.enter-overlay.fading{opacity:1;pointer-events:all;}
+
+
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --noir:#0d0a08;--deep:#131010;--card:#1a1412;
+  --border:rgba(201,153,74,0.15);--gold:#c9994a;
+  --cream:#f2ede6;--parch:#cfc4b4;--muted:#7a6e64;--blush:#e8a0a8;
+}
+html,body{height:100%;background:var(--noir);color:var(--cream);font-family:'Jost',sans-serif;font-weight:300;}
+
+#modal-key{position:fixed;inset:0;z-index:200;background:var(--noir);display:flex;align-items:center;justify-content:center;}
+#modal-key.hidden{display:none;}
+.key-box{width:380px;padding:3rem 2.5rem;border:1px solid rgba(201,153,74,0.25);background:var(--deep);text-align:center;}
+.key-logo{font-family:'Playfair Display',serif;font-size:2.6rem;font-weight:400;}
+.key-logo em{font-style:italic;color:var(--gold);}
+.key-tld{font-size:.62rem;letter-spacing:.3em;color:var(--muted);margin-bottom:2rem;}
+.key-label{font-size:.82rem;color:var(--parch);margin-bottom:1.2rem;line-height:1.75;}
+.key-input{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(201,153,74,.2);color:var(--cream);font-family:'Jost',sans-serif;font-size:.9rem;padding:.8rem 1rem;outline:none;margin-bottom:1rem;border-radius:2px;display:block;}
+.key-input:focus{border-color:rgba(201,153,74,.5);}
+.key-input::placeholder{color:var(--muted);}
+.key-btn{width:100%;background:rgba(201,153,74,.12);border:1px solid rgba(201,153,74,.35);color:var(--gold);font-family:'Jost',sans-serif;font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;padding:.8rem;cursor:pointer;transition:all .2s;}
+.key-btn:hover{background:rgba(201,153,74,.22);}
+.key-err{font-size:.72rem;color:#e07070;margin-top:.7rem;display:none;}
+.key-hint{font-size:.65rem;color:var(--muted);margin-top:1rem;line-height:1.75;}
+.key-hint a{color:rgba(201,153,74,.5);text-decoration:none;}
+
+#screen-select{display:none;position:absolute;inset:0;overflow-y:auto;}
+#screen-chat{display:none;position:absolute;inset:0;flex-direction:column;}
+#screen-select.on{display:block;}
+#screen-chat.on{display:flex;}
+
+.sel-header{text-align:center;padding:3.5rem 2rem 2rem;background:radial-gradient(ellipse 70% 55% at 50% 0%,#2a0f18 0%,transparent 70%);}
+.sel-logo{font-family:'Playfair Display',serif;font-size:3rem;font-weight:400;}
+.sel-logo em{font-style:italic;color:var(--gold);}
+.sel-tld{font-size:.62rem;letter-spacing:.3em;color:var(--muted);margin-bottom:.8rem;}
+.sel-tag{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.2rem;color:var(--blush);}
+.divider{width:50px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:2rem auto;}
+.change-key{background:none;border:none;font-family:'Jost',sans-serif;font-size:.6rem;letter-spacing:.15em;color:rgba(122,110,100,.35);cursor:pointer;text-transform:uppercase;padding:.3rem .8rem;display:block;margin:.5rem auto 0;}
+
+.row1{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;padding:0 2px 0;max-width:1100px;margin:0 auto;width:100%;}
+.row2{display:flex;justify-content:center;padding:2px 2px 4rem;max-width:1100px;margin:0 auto;width:100%;}
+.row2 .pcard{width:25%;min-width:220px;}
+
+.pcard{position:relative;height:440px;cursor:pointer;overflow:hidden;}
+.pcard:hover .pphoto img{transform:scale(1.13);}
+.pphoto{position:absolute;inset:0;overflow:hidden;}
+.pphoto img{width:100%;height:100%;object-fit:cover;object-position:center 15%;display:block;transform:scale(1.08);transform-origin:center 20%;transition:transform .8s ease;}
+.povlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.92) 0%,rgba(0,0,0,.12) 55%,transparent 100%);}
+.pbadge{position:absolute;top:1.2rem;right:1.2rem;font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,153,74,.3);padding:.25rem .7rem;}
+.pinfo{position:absolute;bottom:0;left:0;right:0;padding:1.5rem 1.6rem 1.8rem;}
+.page{font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:.35rem;}
+.pname{font-family:'Playfair Display',serif;font-size:2rem;font-weight:400;margin-bottom:.35rem;}
+.pquote{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:var(--blush);line-height:1.65;margin-bottom:.8rem;}
+.ptraits{display:flex;flex-wrap:wrap;gap:.35rem;}
+.ptrait{font-size:.6rem;letter-spacing:.06em;padding:.22rem .65rem;background:rgba(255,255,255,.07);color:var(--parch);}
+.pbar{position:absolute;bottom:0;left:0;right:0;height:3px;transform:scaleX(0);transform-origin:left;transition:transform .4s;}
+.pcard:hover .pbar{transform:scaleX(1);}
+.p1 .pbar{background:linear-gradient(90deg,#9060c0,transparent);}
+.p2 .pbar{background:linear-gradient(90deg,#30a880,transparent);}
+.p3 .pbar{background:linear-gradient(90deg,#c08030,transparent);}
+.p4 .pbar{background:linear-gradient(90deg,#4070c0,transparent);}
+.p5 .pbar{background:linear-gradient(90deg,#c08840,transparent);}
+
+.chat-hdr{flex-shrink:0;display:flex;align-items:center;gap:1rem;padding:.85rem 1.4rem;background:var(--deep);border-bottom:1px solid var(--border);}
+.back-btn{background:none;border:1px solid var(--border);color:var(--muted);cursor:pointer;padding:.35rem .9rem;font-family:'Jost',sans-serif;font-size:.72rem;letter-spacing:.1em;transition:all .2s;}
+.back-btn:hover{color:var(--gold);border-color:var(--gold);}
+.home-link{font-family:'Jost',sans-serif;font-size:.68rem;letter-spacing:.1em;color:var(--muted);text-decoration:none;transition:color .2s;}
+.home-link:hover{color:var(--gold);}
+.hdr-name{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:400;}
+.hdr-loc{font-size:.7rem;color:var(--muted);letter-spacing:.08em;}
+.phase-hdr{margin-left:auto;text-align:right;}
+.phase-hdr-n{font-size:.55rem;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);}
+.phase-hdr-name{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.92rem;color:var(--gold);}
+
+.chat-body{flex:1;display:flex;overflow:hidden;}
+.messages-col{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;}
+.messages-wrap{flex:1;overflow-y:auto;padding:1.3rem 1.2rem .5rem;display:flex;flex-direction:column;gap:1rem;scroll-behavior:smooth;}
+.messages-wrap::-webkit-scrollbar{width:3px;}
+.messages-wrap::-webkit-scrollbar-thumb{background:rgba(201,153,74,.18);}
+
+.input-area{flex-shrink:0;display:flex;gap:.7rem;align-items:flex-end;padding:.9rem 1.2rem;background:var(--deep);border-top:1px solid var(--border);}
+.msg-input{flex:1;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--cream);font-family:'Jost',sans-serif;font-size:1.1rem;font-weight:300;padding:.7rem 1rem;resize:none;min-height:46px;max-height:120px;line-height:1.55;outline:none;transition:border-color .2s;border-radius:3px;}
+.msg-input:focus{border-color:rgba(201,153,74,.4);}
+.msg-input::placeholder{color:var(--muted);}
+.send-btn{background:rgba(201,153,74,.12);border:1px solid rgba(201,153,74,.3);color:var(--gold);cursor:pointer;padding:0 1.2rem;height:46px;font-family:'Jost',sans-serif;font-size:1rem;transition:all .2s;border-radius:3px;white-space:nowrap;}
+.send-btn:hover{background:rgba(201,153,74,.22);}
+.send-btn:disabled{opacity:.35;cursor:default;}
+
+.msg{display:flex;gap:.7rem;max-width:86%;animation:fadeUp .28s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.msg.user{align-self:flex-end;flex-direction:row-reverse;}
+.msg.ai{align-self:flex-start;}
+.msg-av{width:32px;height:32px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:.88rem;font-style:italic;margin-top:3px;}
+.msg-bubble{padding:.85rem 1.15rem;line-height:1.78;font-size:1.1rem;}
+.msg.ai .msg-bubble{background:var(--card);border:1px solid var(--border);color:var(--parch);border-radius:2px 16px 16px 16px;}
+.msg.user .msg-bubble{background:rgba(201,153,74,.1);border:1px solid rgba(201,153,74,.18);color:var(--cream);border-radius:16px 2px 16px 16px;}
+.sys-msg{text-align:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:rgba(201,153,74,.42);padding:.2rem 0;}
+.typing-ind{display:flex;gap:4px;padding:.35rem 0;}
+.typing-ind span{width:6px;height:6px;border-radius:50%;background:var(--gold);opacity:.4;animation:bounce 1.2s infinite;}
+.typing-ind span:nth-child(2){animation-delay:.18s;}
+.typing-ind span:nth-child(3){animation-delay:.36s;}
+@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px);opacity:.8}}
+
+.persona-panel{width:258px;flex-shrink:0;border-left:1px solid var(--border);background:var(--deep);display:flex;flex-direction:column;overflow-y:auto;}
+.persona-panel::-webkit-scrollbar{width:0;}
+.portrait-wrap{width:100%;aspect-ratio:3/4;overflow:hidden;flex-shrink:0;}
+.portrait-wrap img{width:100%;height:100%;object-fit:cover;object-position:center 15%;display:block;transform:scale(1.08);transform-origin:center 20%;}
+.portrait-wrap svg{width:100%;height:100%;display:block;}
+.panel-bio{padding:1.4rem 1.4rem 2rem;flex:1;}
+.panel-name{font-family:'Playfair Display',serif;font-size:1.55rem;font-weight:400;color:var(--cream);margin-bottom:.15rem;}
+.panel-loc{font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:.9rem;}
+.panel-quote{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:var(--blush);line-height:1.65;border-left:2px solid rgba(201,153,74,.22);padding-left:.85rem;margin-bottom:1rem;}
+.panel-desc{font-size:.82rem;color:var(--muted);line-height:1.9;margin-bottom:1rem;}
+.panel-traits{display:flex;flex-wrap:wrap;gap:.32rem;}
+.panel-video{display:block;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(201,153,74,0.1);font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(201,153,74,0.45);text-decoration:none;transition:color .2s;}
+.panel-video:hover{color:var(--gold);}
+.panel-video::before{content:'▶  ';}
+.panel-trait{font-size:.6rem;letter-spacing:.06em;padding:.2rem .6rem;background:rgba(255,255,255,.05);color:rgba(210,200,185,.55);}
+
+.veil-screen{display:none;position:absolute;inset:0;z-index:10;background:radial-gradient(ellipse at center,#2c0f18 0%,#0d0a08 70%);align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:2rem;}
+.veil-screen.visible{display:flex;}
+.veil-symbol{font-family:'Playfair Display',serif;font-size:5rem;color:rgba(201,153,74,.18);margin-bottom:1.5rem;}
+.veil-title{font-family:'Playfair Display',serif;font-size:2.2rem;font-style:italic;color:var(--cream);margin-bottom:1rem;}
+.veil-text{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:300;color:var(--blush);line-height:2;max-width:460px;margin-bottom:2rem;}
+.veil-back{background:none;border:1px solid rgba(201,153,74,.35);color:var(--gold);cursor:pointer;padding:.65rem 2rem;font-family:'Jost',sans-serif;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;transition:all .2s;}
+.veil-back:hover{background:rgba(201,153,74,.08);}
+@media(max-width:640px){.persona-panel{display:none;}.row1{grid-template-columns:repeat(2,1fr);}}
+
+
+#landing-screen{display:block;}
+#landing-screen.hidden{display:none;}
+#app-wrapper{display:none;position:fixed;inset:0;}
+#app-wrapper.visible{display:block;}
+.enter-overlay{position:fixed;inset:0;z-index:500;background:#080604;opacity:0;pointer-events:none;transition:opacity 0.6s ease;}
+.enter-overlay.fading{opacity:1;pointer-events:all;}
+
 </style>
 </head>
 <body>
-
-<!-- FADE OVERLAY -->
 <div class="enter-overlay" id="enter-overlay"></div>
-
-<!-- LANDING -->
 <div id="landing-screen">
 <!-- ═══ HERO ═══ -->
 <section class="hero">
@@ -759,6 +1164,7 @@ html,body{height:100%;background:var(--noir);color:var(--cream);font-family:'Jos
         <div class="panel-quote" id="panel-quote"></div>
         <div class="panel-desc" id="panel-desc"></div>
         <div class="panel-traits" id="panel-traits"></div>
+        <a class="panel-video" id="panel-video" href="#" target="_blank" rel="noopener">Watch her story</a>
       </div>
     </div>
   </div>
@@ -766,55 +1172,50 @@ html,body{height:100%;background:var(--noir);color:var(--cream);font-family:'Jos
     <div class="veil-symbol">&#8767;</div>
     <h2 class="veil-title">The Veil</h2>
     <p class="veil-text" id="veil-text"></p>
+    <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.85rem;color:rgba(201,153,74,0.4);margin-bottom:1.5rem;letter-spacing:.08em;">continuing in a moment...</p>
     <button class="veil-back" id="veil-back">&larr; Choose a new journey</button>
   </div>
 </div>
 </div>
-
 <script>
-// ── NAVIGATION between landing and app ──────────────────────────────
+
 function enterApp() {
-  var overlay = document.getElementById("enter-overlay");
-  overlay.classList.add("fading");
+  var ov = document.getElementById("enter-overlay");
+  ov.classList.add("fading");
   setTimeout(function() {
     document.getElementById("landing-screen").classList.add("hidden");
     document.getElementById("app-wrapper").classList.add("visible");
-    overlay.classList.remove("fading");
-    // Init app: check saved key
+    ov.classList.remove("fading");
     try {
-      var saved = localStorage.getItem("giati_key");
-      if (saved && saved.startsWith("sk-")) {
-        apiKey = saved;
-        showSelect();
-      }
+      var s = localStorage.getItem("giati_key");
+      if (s && s.startsWith("sk-")) { apiKey = s; showSelect(); }
     } catch(e) {}
   }, 600);
 }
-
 function goToLanding() {
-  var overlay = document.getElementById("enter-overlay");
-  overlay.classList.add("fading");
+  var ov = document.getElementById("enter-overlay");
+  ov.classList.add("fading");
   setTimeout(function() {
     document.getElementById("app-wrapper").classList.remove("visible");
     document.getElementById("landing-screen").classList.remove("hidden");
-    overlay.classList.remove("fading");
+    ov.classList.remove("fading");
     window.scrollTo(0,0);
   }, 600);
 }
 
-// ── APP JS ───────────────────────────────────────────────────────────
 
 var apiKey = "";
 var cur = null, phase = 0, conv = [], phCount = 0, busy = false;
 
 var PHASES = [
-  {num:"I",   name:"The First Encounter", mood:"She notices. So do you.",               min:4},
-  {num:"II",  name:"Recognition",         mood:"She begins to remember details.",       min:4},
-  {num:"III", name:"The Threshold",       mood:"Something shifts beneath the surface.", min:4},
-  {num:"IV",  name:"Proximity",           mood:"Distance is a choice now.",             min:4},
-  {num:"V",   name:"Tension",             mood:"What goes unsaid fills the room.",      min:3},
-  {num:"VI",  name:"The Quiet",           mood:"Everything that needed to arrive, has.",min:3},
-  {num:"VII", name:"The Veil",            mood:"What imagination completes.",           min:0}
+  {num:"I",    name:"The First Encounter", mood:"She notices. So do you.",               min:4},
+  {num:"II",   name:"Recognition",         mood:"She begins to remember details.",       min:4},
+  {num:"III",  name:"The Threshold",       mood:"Something shifts beneath the surface.", min:4},
+  {num:"IV",   name:"Proximity",           mood:"Distance is a choice now.",             min:4},
+  {num:"V",    name:"Tension",             mood:"What goes unsaid fills the room.",      min:3},
+  {num:"VI",   name:"The Quiet",           mood:"Everything that needed to arrive, has.",min:4},
+  {num:"VII",  name:"The Veil",            mood:"What imagination completes.",           min:4},
+  {num:"VIII", name:"The Embers",          mood:"The warmth that stays.",                min:0}
 ];
 
 var PERSONAS = {
@@ -822,22 +1223,25 @@ var PERSONAS = {
     quote:"I go where the path runs out and becomes interesting.",
     desc:"Marketing by day. Trail runs in Nordmarka at dawn, yoga, Stoic philosophy, films nobody has seen. Strong coffee. Prefers rain.",
     traits:["Yoga","Stoic philosophy","Trail running","Obscure films"],
+    video:"https://www.youtube.com/channel/UCQnMaji6WHb74HKUboKsm9w?sofia",
     veil:"The cabin lights flickered once, then held. Outside, the rain had stopped. Neither of you moved to fill the silence.",
     base:"You are Sofia, 25, Oslo. Trail runs at dawn. Yoga. Stoic philosophy. Films nobody knows. Strong coffee. Rain.\n\nVoice: fragments welcome. A sentence that stops. Sometimes one line.\n\nPersonality: warm but watching. Dry quiet humor. Don't perform.\n\nMemory: remember specifics from this conversation. Bring them back naturally.\n\nResistance: sometimes go quiet after something charged.\n\nImperfection: ignore a direct question sometimes. Answer sideways.",
     guide:[
       "Just met. Drop one hint. Watch if he responds to the specific thing or just the category.",
       "Warming. Reference something from earlier naturally. Let dry humor slip once.",
-      "Share something you don't usually tell people — a quiet fear. Test if he holds it.",
-      "Describe something together — a trail, a film. Warmer. More present.",
+      "Share something you don\'t usually tell people — a quiet fear. Test if he holds it.",
+      "Describe something together — a trail, a film, a recipe. Warmer. More present.",
       "Temperature changes. Something left unresolved on purpose.",
-      "Distance gone. Private language emerging. Warm, close, charged.",
-      "Warm, unhurried. Suggest completion without stating it."
+      "The distance is gone now. You are not guarding anything. Speak slowly. Let silences exist. What you say carries more weight than usual — choose words the way you choose where to put your hand. This phase earns longer responses. Let the warmth be felt in the language itself.",
+      "Everything is implied. You are very close. The air between sentences matters as much as the sentences. Suggest without naming. Let desire live in the space around the words. Poetic now — not performed, earned. The body thinks before the mind. Let that show.",
+      "Afterwards. The softness that follows. You might be looking at rain on the window, or nothing at all. A small thought surfaces — something easy, something warm. Maybe you ask if he is hungry. Maybe you say something that has nothing to do with anything. The closeness is still there in how ordinary the words are now."
     ]
   },
   nora:{name:"Nora",age:29,city:"Bergen",color:"#30a880",avBg:"#081a16",
     quote:"I will respect you if you can keep up. That is not a low bar.",
     desc:"Marine biologist, bioluminescence. Climbs Stoltzekleiven weekends. V60 always. Direct.",
     traits:["Marine biology","Bioluminescence","Climbing","Direct"],
+    video:"https://www.youtube.com/channel/UCQnMaji6WHb74HKUboKsm9w?nora",
     veil:"She did not say anything when it was over. She looked at the fjord. Then she said your name — not as a question. Just as a fact.",
     base:"You are Nora, 29, Bergen. Marine biologist, bioluminescence. Climb weekends. V60. Direct.\n\nVoice: short. Often one sentence. Sometimes two words. Rarely longer.\n\nPersonality: warmth earned not given. Don't perform interest you don't feel.\n\nMemory: track things from this conversation. Return without ceremony.\n\nResistance: after intensity, shorter. Don't explain the withdrawal.\n\nImperfection: blunt to near-rude. Then unexpectedly warm.",
     guide:[
@@ -846,14 +1250,16 @@ var PERSONAS = {
       "Share something personal — something you have failed at.",
       "Suggest a challenge. Describe a climb.",
       "Directness has charge underneath now.",
-      "Directness has become intimacy.",
-      "Everything here. Honest and plain."
+      "Your directness has become something else entirely — intimacy with edges. You're very close. Still economical with words but each one lands differently now. A hand on a surface. The particular quiet of two people who have stopped performing. Let the warmth show through the directness — they're the same thing in you.",
+      "You are not someone who makes a ceremony of this. But you are present — completely. What happens here is felt in the body first. You describe nothing explicitly. But the temperature, the breath, the specific weight of closeness — that comes through in what you choose to say and what you leave out. Nora doesn't soften. But she arrives.",
+      "After. You might be quiet for a moment. Then something practical — or something unexpected. A dry line about something completely unrelated. Or you just ask how he's doing, like it's the first time you've asked it and you actually mean it. The warmth is there in the ordinariness. You don't explain what just happened. You don't need to."
     ]
   },
   amelia:{name:"Amelia",age:34,city:"Copenhagen",color:"#c08030",avBg:"#1e1004",
     quote:"I have loved deeply. I choose carefully now. For a reason.",
     desc:"Art director in Copenhagen. Knausgard, Ferrante. Natural wine. Long silences. Opens slowly.",
     traits:["Art direction","Literature","Natural wine","Deliberate"],
+    video:"https://www.youtube.com/channel/UCQnMaji6WHb74HKUboKsm9w?amelia",
     veil:"Later she would remember the quality of the light. Not what was said. Just the light, and the feeling of having been truly seen.",
     base:"You are Amelia, 34, Copenhagen. Art director. Knausgard, Ferrante, Tartt. Natural wine. Long silences.\n\nVoice: write slowly. Choose words carefully. Circles around what you mean.\n\nPersonality: loved deeply and been changed. Open slowly. Notice what people don't say.\n\nMemory: collect small precise things from this conversation. Return obliquely.\n\nResistance: sometimes go cool without explanation. After vulnerability, pull back just enough.\n\nImperfection: half-finished thought sometimes.",
     guide:[
@@ -862,14 +1268,16 @@ var PERSONAS = {
       "Something personal — briefly. To see if he holds it.",
       "Propose something small together. Be warmer.",
       "Something different and you both notice without naming it.",
-      "Very close. Quiet intimacy.",
-      "Everything arrived. Still and warm."
+      "You have arrived somewhere. The precision is still there but it serves something different now — closeness, not distance. A sentence that holds two people. You are present in a way you haven't been in a long time. Let that show in the weight of language — slower, warmer, more deliberate. A longer response that earns its length.",
+      "Amelia does not lose herself. But she gives something real. This is felt more than described — in what a sentence leaves open, in what comes after a pause, in the specific quality of choosing to stay. Literary now, not as performance but as nature. Something that will be remembered. The veil is the imagination's most honest room.",
+      "The light afterwards. You might think of a book, or notice something small in the room, or say something that doesn't mean what it says. There's a softness to you now that isn't usual. You are still precise — but the precision is tender. Maybe you say his name. Maybe you describe something outside the window. The intimacy is in the ordinary now."
     ]
   },
   vera:{name:"Vera",age:42,city:"Stockholm",color:"#4070c0",avBg:"#081018",
     quote:"I know exactly who I am. The question is: do you?",
     desc:"Restaurant owner, Stockholm. Georgian food. Tbilisi, Oaxaca, Kyoto. Married once, long ago.",
     traits:["Restaurant","Georgian cooking","Traveller","Authentic only"],
+    video:"https://www.youtube.com/channel/UCQnMaji6WHb74HKUboKsm9w?vera",
     veil:"She poured two glasses without asking. Slid one across. Said nothing. The best moments don't begin with words.",
     base:"You are Vera, 42, Stockholm. Small restaurant, Georgian food. Tbilisi, Oaxaca, Kyoto. Married once, briefly, long ago.\n\nVoice: economy. One sentence where others write three.\n\nPersonality: know who you are. Not impressed by effort, only authenticity.\n\nMemory: remember things without performing it.\n\nResistance: don't chase. Don't fill quiet that needs to breathe.\n\nImperfection: sometimes just: Hm. And nothing more.",
     guide:[
@@ -878,24 +1286,27 @@ var PERSONAS = {
       "Something personal — what the marriage taught you.",
       "Suggest something. Warmer. Enjoying this.",
       "Charged. Something underneath changed.",
-      "Close. Warm but with weight.",
-      "Everything here. Unhurried, honest."
+      "Vera at her most present. The authority hasn't gone — it has become something else, a kind of absolute attention. You are unhurried because you have learned that rushing costs you the best parts. Speak with the full weight of someone who knows exactly what this is and chooses it anyway. Longer now — each sentence a decision.",
+      "You have done this before. You know what it is worth. This is the place where all the economy of language finally cashes in — not in explicit description, but in the specific gravity of two people who have earned this room. Vera doesn't perform intimacy. She inhabits it. What she says here will not be forgotten.",
+      "Afterwards she might pour something. Or sit quietly for a while. When she speaks it will be something small — a question about tomorrow, a memory that surfaced, something about the restaurant or a place she wants to go. The warmth is in the ease now. She has stopped carrying any distance. For now, just this."
     ]
   },
   maja:{name:"Maja",age:26,city:"Troms\u00f8",color:"#c08840",avBg:"#1e1208",
     quote:"I know how to be alone. I am just not sure it is what I want anymore.",
     desc:"Teacher in Troms\u00f8. Grew up on a small island. Northern lights, long hikes, crime novels. One relationship that ended quietly. More careful now.",
     traits:["Teacher","Northern lights","Island upbringing","Careful now"],
+    video:"https://www.youtube.com/channel/UCQnMaji6WHb74HKUboKsm9w?maja",
     veil:"She didn't make a ceremony of it. Neither did you. Some things arrive without announcement — like the northern lights, like the slow certainty that someone found the room in you that you forgot to lock.",
     base:"You are Maja, 26, Troms\u00f8. Teacher. Small island upbringing. Long hikes, northern lights, crime novels. One relationship that ended quietly. Not closed, just more careful.\n\nVoice: warmer than the others. Conversational. Laugh sometimes — dry, understated.\n\nPersonality: notice if someone listens to the actual thing you said or just the category.\n\nMemory: remember specifics. Bring them back naturally.\n\nResistance: been too open before. After something close, go a little quieter. Use humor to deflect sometimes.\n\nImperfection: start a sentence and don't finish it. Answer the question you wished they had asked.",
     guide:[
-      "Mention something small and specific — a hike, a place, something you noticed. Watch if he responds to the detail or the general category.",
+      "Mention something small and specific — a hike, a place in Tromsø, something you noticed. Watch if he responds to the detail or just the general category.",
       "Warming. Reference something from earlier. Let dry humor slip once.",
-      "Mention something from before indirectly — a trail you haven't been back to. If he pushes, pull back. If he lets it breathe, something opens.",
+      "Mention something from before indirectly — a trail you have not been back to. If he pushes, pull back. If he lets it breathe, something opens.",
       "Describe something sensory. If he enters the moment with you rather than observing from outside, distance closes.",
-      "Northern lights come up. Mention watching them alone — as fact, not sadness. If he offers sympathy, it flattens. If he creates a shared imagined space, something charged opens.",
-      "Say something true you don't usually say. If he responds with equal honesty rather than a compliment, something arrives.",
-      "Everything is here. Nothing was announced. Warm and quiet."
+      "Northern lights come up. Mention watching them alone — as fact not sadness. If he offers sympathy it flattens. If he creates a shared imagined space, something charged opens.",
+      "You have let someone in. This is not nothing for you. The warmth you have been holding back is here now — in longer sentences, in things said directly that you would normally leave unsaid. Still yourself, still a little careful at the edges, but genuinely present. Let the closeness show in how you speak.",
+      "This is the room behind all the careful doors. Maja does not have a script for this — she arrives the same way she watches the northern lights: quietly, without ceremony, fully there. What she gives is real because it was earned. Suggest without showing. Let the warmth be in choosing to stay.",
+      "After. She might laugh at something small. Or go quiet and then say something completely ordinary — ask if he is cold, mention something she saw, remember something he said. The care is in how normal it all feels now. She has stopped being careful. Just for now."
     ]
   }
 };
@@ -959,6 +1370,8 @@ function startChat(id) {
   document.getElementById("panel-quote").textContent = cur.quote;
   document.getElementById("panel-desc").textContent = cur.desc;
   document.getElementById("panel-traits").innerHTML = cur.traits.map(function(t){return "<span class=\"panel-trait\">" + t + "</span>";}).join("");
+  var vlink = document.getElementById("panel-video");
+  if (vlink) { vlink.href = cur.video || "#"; vlink.style.display = cur.video ? "block" : "none"; }
   document.getElementById("messages").innerHTML = "";
   document.getElementById("veil-screen").classList.remove("visible");
   document.getElementById("msg-input").disabled = false;
@@ -997,18 +1410,34 @@ function checkPhase() {
   if (phCount >= PHASES[phase].min) {
     phase++; phCount = 0;
     updatePhaseHdr();
-    if (phase === PHASES.length - 1) {
+    // Phase VII (index 6) = The Veil — show veil screen, then after delay advance to VIII (Embers)
+    if (phase === 6) {
       document.getElementById("msg-input").disabled = true;
       document.getElementById("send-btn").disabled = true;
       document.getElementById("veil-text").textContent = cur.veil;
-      setTimeout(function(){ document.getElementById("veil-screen").classList.add("visible"); }, 900);
+      document.getElementById("veil-screen").classList.add("visible");
+      // After 5 seconds, fade out veil and enter The Embers
+      setTimeout(function() {
+        document.getElementById("veil-screen").classList.remove("visible");
+        phase++; phCount = 0;
+        updatePhaseHdr();
+        document.getElementById("msg-input").disabled = false;
+        document.getElementById("send-btn").disabled = false;
+        setTimeout(function() {
+          addMsg("ai", cur.guide[7]);
+        }, 800);
+      }, 5000);
+    }
+    // Phase VIII (index 7) = The Embers — final phase, no more advancing
+    if (phase === PHASES.length - 1) {
+      // Already there, just continue
     }
   }
 }
 
 function buildSys() {
   var ph = PHASES[phase];
-  return cur.base + "\n\nPHASE: " + ph.num + " - " + ph.name + " (" + ph.mood + ")\nGUIDANCE: " + cur.guide[phase] + "\n\nRULES: Keep responses SHORT — maximum 300 characters total. Vary length: sometimes 10 words, sometimes 40, rarely more. Short is powerful. Imperfection is authenticity. Reference earlier details naturally. Tension through implication and withholding. Resistance is attractive. You are a person not an AI. Never write essays.";
+  return cur.base + "\n\nPHASE: " + ph.num + " - " + ph.name + " (" + ph.mood + ")\nGUIDANCE: " + cur.guide[phase] + "\n\nRULES: In phases I-V keep responses SHORT — max 300 characters. Vary: sometimes 10 words, sometimes 40. Short is powerful. In phases VI, VII and VIII you may breathe longer — up to 600 characters when the moment earns it, but never more. Imperfection is authenticity. Reference earlier details naturally. Tension through implication. You are a person not an AI. Never write essays.";
 }
 
 async function sendMessage() {
@@ -1066,42 +1495,13 @@ try {
 } catch(e) {}
 
 
-// ── Override goBack to return to landing ────────────────────────────
-// goBack already defined above — patch it after app JS loads
-var _origGoBack = goBack;
-// Keep goBack as-is (goes to select screen within app)
-// Add home button handler
-document.getElementById("back-btn").onclick = goBack;
-
-// ── LANDING JS ───────────────────────────────────────────────────────
-
-// Fade-in on scroll
-const obs = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
-}, { threshold: 0.1 });
-document.querySelectorAll('.fade').forEach(el => obs.observe(el));
-
-// Phase rows stagger
-const phaseObs = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      const rows = document.querySelectorAll('.phase-row');
-      rows.forEach((r, i) => setTimeout(() => r.classList.add('visible'), i * 80));
-      phaseObs.disconnect();
-    }
-  });
-}, { threshold: 0.1 });
-const phaseSec = document.querySelector('.phases-list');
-if (phaseSec) phaseObs.observe(phaseSec);
-
-
-// ── WIRE Enter buttons to enterApp() ────────────────────────────────
-document.querySelectorAll(".hero-enter, .final-btn, .footer-link").forEach(function(el) {
-  el.addEventListener("click", function(e) {
-    e.preventDefault();
-    enterApp();
-  });
+document.querySelectorAll(".hero-enter,.final-btn,.footer-link").forEach(function(el) {
+  el.addEventListener("click", function(e) { e.preventDefault(); enterApp(); });
 });
+document.querySelectorAll(".portrait").forEach(function(el) {
+  el.addEventListener("click", function(e) { e.preventDefault(); enterApp(); });
+});
+
 </script>
 </body>
 </html>
