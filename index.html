@@ -12,6 +12,7 @@
 <meta name="twitter:title" content="Giati — She won't open up right away.">
 <meta name="twitter:description" content="She won't open up right away. Eight phases. Real connection. Can you get all the way in? Free.">
 <link rel="canonical" href="https://giati.no">
+<script defer data-domain="giati.no" src="https://plausible.io/js/script.js"></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Giati","url":"https://giati.no","description":"AI companion platform with six personas and eight progressive phases of emotional connection","applicationCategory":"Entertainment","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -259,6 +260,8 @@ footer{padding:2.5rem 2rem;border-top:1px solid rgba(201,153,74,.07);display:fle
 </div>
 <script>
 var cur=null,phase=0,conv=[],phCount=0,ringScore=0,busy=false;
+var sessionId=null;
+function trackEvent(ev,extra){try{fetch('/api/track',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({event:ev,sessionId:sessionId,persona:cur?cur.name.toLowerCase():null,phase:phase,timestamp:new Date().toISOString()},extra||{}))}).catch(function(){});}catch(e){}}
 var CIRC=125.66;
 var PHASES=[{num:'I',name:'The First Encounter',mood:'She notices. So do you.',min:6},{num:'II',name:'Recognition',mood:'She begins to remember details.',min:6},{num:'III',name:'The Threshold',mood:'Something shifts beneath the surface.',min:6},{num:'IV',name:'Proximity',mood:'Distance is a choice now.',min:6},{num:'V',name:'Tension',mood:'What goes unsaid fills the room.',min:5},{num:'VI',name:'The Quiet',mood:'Everything that needed to arrive, has.',min:6},{num:'VII',name:'The Veil',mood:'What imagination completes.',min:6},{num:'VIII',name:'The Embers',mood:'The warmth that stays.',min:0}];
 var PHASE_COLORS=["#8888a0","#9070b0","#c07030","#c09030","#c06040","#c9994a","#e8a0a8","#e8c87a"];
@@ -431,6 +434,8 @@ function updatePhaseHdr() {
 
 function startChat(id) {
   cur=PERSONAS[id]; phase=0; conv=[]; phCount=0; ringScore=0; busy=false;
+  sessionId=Math.random().toString(36).substr(2,9)+Date.now().toString(36);
+  trackEvent('session_start');
   document.getElementById("hdr-name").textContent=cur.name;
   document.getElementById("hdr-loc").textContent=cur.age+" · "+cur.city;
   var av=document.getElementById("hdr-av");
@@ -453,6 +458,7 @@ function startChat(id) {
 }
 
 function goBack() {
+  if(sessionId){var um=conv.filter(function(m){return m.role==='user';}).length;trackEvent('session_end',{messages:um,score:ringScore});sessionId=null;}
   document.getElementById("screen-chat").classList.remove("on");
   document.getElementById("screen-select").classList.add("on");
   document.getElementById("veil-screen").classList.remove("visible");
@@ -482,6 +488,7 @@ function checkPhase() {
     ringPulseComplete();
     setTimeout(function() {
       phase++; phCount=0; ringScore=0; updatePhaseHdr();
+      trackEvent('phase_advance');
       if(phase===6) {
         document.getElementById("msg-input").disabled=true;
         document.getElementById("send-btn").disabled=true;
@@ -543,6 +550,7 @@ async function sendMessage() {
     addMsg("ai",reply);
     conv.push({role:"assistant",content:reply});
     ringScore+=score;
+    trackEvent('message',{score:score,messages:conv.filter(function(m){return m.role==='user';}).length});
     updateRing();
     checkPhase();
   } catch(err) {
