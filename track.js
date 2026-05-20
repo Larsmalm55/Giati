@@ -15,7 +15,7 @@ async function rSet(key, value) {
   });
 }
 
-exports.handler = async function(event) {
+export const handler = async (event) => {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method Not Allowed' };
   }
@@ -81,7 +81,6 @@ exports.handler = async function(event) {
       body: JSON.stringify({ ok: true })
     };
   } catch(err) {
-    console.error('Track error:', err.message);
     return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
   }
 };

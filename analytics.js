@@ -10,7 +10,7 @@ async function rGet(key) {
   return data.result ? JSON.parse(data.result) : null;
 }
 
-exports.handler = async function(event) {
+export const handler = async (event) => {
   const token = event.headers['x-admin-token'] || '';
   if (token !== ADMIN_TOKEN) {
     return { statusCode: 401, body: JSON.stringify({ error: 'Unauthorized' }) };
