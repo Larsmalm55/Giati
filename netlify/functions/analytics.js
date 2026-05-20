@@ -1,75 +1,40 @@
-import { getStore } from "@netlify/blobs";
+const { getStore } = require('@netlify/blobs');
 
-const ADMIN_TOKEN = process.env.GIATI_ADMIN_TOKEN || "giati-admin-2026";
+const ADMIN_TOKEN = process.env.GIATI_ADMIN_TOKEN || 'giati-admin-2026';
 
-export default async (req, context) => {
-  // CORS preflight
-  if (req.method === "OPTIONS") {
-    return new Response(null, {
-      status: 204,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "X-Admin-Token, Content-Type",
-      },
-    });
+exports.handler = async function(event) {
+  if (event.httpMethod === 'OPTIONS') {
+    return { statusCode:204, headers:{'Access-Control-Allow-Origin':'*','Access-Control-Allow-Headers':'X-Admin-Token, Content-Type'}, body:'' };
   }
 
-  // Auth check
-  const token = req.headers.get("X-Admin-Token") || "";
+  const token = (event.headers['x-admin-token'] || event.headers['X-Admin-Token'] || '');
   if (token !== ADMIN_TOKEN) {
-    return new Response(JSON.stringify({ error: "Unauthorized" }), {
-      status: 401,
-      headers: { "Content-Type": "application/json" },
-    });
+    return { statusCode:401, headers:{'Content-Type':'application/json'}, body: JSON.stringify({error:'Unauthorized'}) };
   }
 
   try {
-    const store = getStore("giati-analytics");
+    const store = getStore('giati-analytics');
 
-    // Hent aggregerte stats
-    const statsRaw = await store.get("stats").catch(() => null);
-    const stats = statsRaw
-      ? JSON.parse(statsRaw)
-      : {
-          total_sessions: 0,
-          personas: {},
-          persona_avg_phase: {},
-          phase_funnel: [0, 0, 0, 0, 0, 0, 0, 0],
-          score_dist: { "0": 0, "1": 0, "2": 0 },
-          avg_phase: 0,
-          sessions_by_date: {},
-        };
+    const statsRaw = await store.get('stats').catch(() => null);
+    const stats = statsRaw ? JSON.parse(statsRaw) : {
+      total_sessions:0, personas:{}, persona_avg_phase:{},
+      phase_funnel:[0,0,0,0,0,0,0,0],
+      score_dist:{'0':0,'1':0,'2':0},
+      avg_phase:0, sessions_by_date:{}
+    };
 
-    // Hent siste sessions-liste
-    const recentRaw = await store.get("recent_sessions").catch(() => null);
+    const recentRaw = await store.get('recent_sessions').catch(() => null);
     const recent = recentRaw ? JSON.parse(recentRaw) : [];
 
-    // Today count
-    const today = new Date().toISOString().split("T")[0];
-    const todayCount = (stats.sessions_by_date || {})[today] || 0;
+    const today = new Date().toISOString().split('T')[0];
+    const todayCount = (stats.sessions_by_date||{})[today] || 0;
 
-    return new Response(
-      JSON.stringify({
-        ...stats,
-        today_sessions: todayCount,
-        recent_sessions: recent.slice(0, 25),
-      }),
-      {
-        status: 200,
-        headers: {
-          "Content-Type": "application/json",
-          "Cache-Control": "no-cache, no-store",
-        },
-      }
-    );
-  } catch (err) {
-    return new Response(JSON.stringify({ error: err.message }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
+    return {
+      statusCode:200,
+      headers:{'Content-Type':'application/json','Cache-Control':'no-cache, no-store'},
+      body: JSON.stringify({ ...stats, today_sessions:todayCount, recent_sessions:recent.slice(0,25) })
+    };
+  } catch(err) {
+    return { statusCode:500, body: JSON.stringify({error:err.message}) };
   }
-};
-
-export const config = {
-  path: "/api/analytics",
 };
