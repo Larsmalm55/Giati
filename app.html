@@ -234,6 +234,20 @@ html,body{height:100%;background:var(--noir);color:var(--cream);font-family:'Jos
 <script>
 var apiKey = "";
 var cur = null, phase = 0, conv = [], phCount = 0, busy = false;
+var sessionId = null;
+function trackEvent(ev, extra) {
+  try {
+    fetch('/api/track', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(Object.assign({
+        event: ev, sessionId: sessionId,
+        persona: cur ? cur.name.toLowerCase() : null,
+        phase: phase, timestamp: new Date().toISOString()
+      }, extra || {}))
+    }).catch(function(){});
+  } catch(e) {}
+}
 
 var PHASES = [
   {num:"I",    name:"The First Encounter", mood:"She notices. So do you.",               min:4},
@@ -390,6 +404,8 @@ function updatePhaseHdr() {
 function startChat(id) {
   cur = PERSONAS[id];
   phase = 0; conv = []; phCount = 0; busy = false;
+  sessionId = Math.random().toString(36).substr(2,9) + Date.now().toString(36);
+  trackEvent('session_start');
   document.getElementById("hdr-name").textContent = cur.name;
   document.getElementById("hdr-loc").textContent = cur.age + " · " + cur.city;
   setPortrait(document.getElementById("portrait-wrap"), id);
@@ -411,6 +427,7 @@ function startChat(id) {
 }
 
 function goBack() {
+  if (sessionId) { trackEvent('session_end', {messages: conv.filter(function(m){return m.role==='user';}).length}); sessionId = null; }
   document.getElementById("screen-chat").classList.remove("on");
   document.getElementById("screen-select").classList.add("on");
   document.getElementById("veil-screen").classList.remove("visible");
@@ -438,6 +455,7 @@ function checkPhase() {
   if (phCount >= PHASES[phase].min) {
     phase++; phCount = 0;
     updatePhaseHdr();
+    trackEvent('phase_advance');
     // Phase VII (index 6) = The Veil — show veil screen, then after delay advance to VIII (Embers)
     if (phase === 6) {
       document.getElementById("msg-input").disabled = true;
@@ -449,6 +467,7 @@ function checkPhase() {
         document.getElementById("veil-screen").classList.remove("visible");
         phase++; phCount = 0;
         updatePhaseHdr();
+        trackEvent('phase_advance');
         document.getElementById("msg-input").disabled = false;
         document.getElementById("send-btn").disabled = false;
         setTimeout(function() {
@@ -477,6 +496,7 @@ async function sendMessage() {
   addMsg("user", text);
   conv.push({role:"user", content:text});
   phCount++;
+  trackEvent('message', {messages: conv.filter(function(m){return m.role==='user';}).length});
   showTyping();
   try {
     var res = await fetch("https://api.anthropic.com/v1/messages", {
