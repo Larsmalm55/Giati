@@ -1,18 +1,11 @@
 [build]
   publish = "."
-  command = "npm install"
+  functions = "netlify/functions"
 
-[functions]
-  directory = "netlify/functions"
-  node_bundler = "esbuild"
-
-# Beskytt admin-siden med HTTP Basic Auth (krever Netlify Pro)
-# Alternativt: bruk login-skjermen i admin.html
-#
-# [[headers]]
-#   for = "/admin.html"
-#   [headers.values]
-#     Basic-Auth = "admin:giati-admin-2026"
+[[redirects]]
+  from = "/api/chat"
+  to = "/.netlify/functions/chat"
+  status = 200
 
 [[redirects]]
   from = "/api/track"
@@ -22,9 +15,4 @@
 [[redirects]]
   from = "/api/analytics"
   to = "/.netlify/functions/analytics"
-  status = 200
-
-[[redirects]]
-  from = "/api/chat"
-  to = "/.netlify/functions/chat"
   status = 200
