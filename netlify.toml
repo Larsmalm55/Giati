@@ -3,6 +3,9 @@
   command = "npm install"
   functions = "netlify/functions"
 
+[functions]
+  node_bundler = "esbuild"
+
 [[redirects]]
   from = "/api/chat"
   to = "/.netlify/functions/chat"
