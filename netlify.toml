@@ -10,13 +10,3 @@
   from = "/api/chat"
   to = "/.netlify/functions/chat"
   status = 200
-
-[[redirects]]
-  from = "/api/track"
-  to = "/.netlify/functions/track"
-  status = 200
-
-[[redirects]]
-  from = "/api/analytics"
-  to = "/.netlify/functions/analytics"
-  status = 200
