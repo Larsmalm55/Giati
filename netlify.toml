@@ -10,3 +10,8 @@
   from = "/api/chat"
   to = "/.netlify/functions/chat"
   status = 200
+
+[[redirects]]
+  from = "/api/memory"
+  to = "/.netlify/functions/memory"
+  status = 200
