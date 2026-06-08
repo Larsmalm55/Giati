@@ -573,9 +573,9 @@ async function sendMessage() {
     hideTyping();
     var raw=(data.content&&data.content[0])?data.content[0].text:"...";
     var score=0;
-    var scoreMatch=raw.match(/\[SCORE:(\d)\]/);
+    var scoreMatch=raw.match(/\[SCORE:\s*(\d)\]/);
     if(scoreMatch){score=parseInt(scoreMatch[1]);}
-    var reply=raw.replace(/\s*\[SCORE:\d\]\s*/g,"").trim();
+    var reply=raw.replace(/\s*\[SCORE:\s*\d\]\s*/g,"").trim();
     addMsg("ai",reply);
     conv.push({role:"assistant",content:reply});
     ringScore+=score;
