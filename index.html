@@ -403,45 +403,48 @@ function ringPulseComplete() {
 function setPortrait(el,id,phaseNum) {
   if(!el)return;
   el.innerHTML="";
-  var p = (phaseNum !== undefined) ? phaseNum : phase;
-  var videoSrc="/videos/"+id+"-fase"+(p+1)+".mp4";
-  var vid=document.createElement("video");
-  vid.autoplay=true;
-  vid.loop=true;
-  vid.muted=true;
-  vid.playsInline=true;
-  vid.style.width="100%";
-  vid.style.height="100%";
-  vid.style.objectFit="cover";
-  vid.style.objectPosition="center 15%";
-  vid.style.display="block";
-  var src=document.createElement("source");
-  src.src=videoSrc;
-  src.type="video/mp4";
-  vid.appendChild(src);
-  vid.onerror=function(){
-    el.innerHTML="";
-    var img=document.createElement("img");
-    img.src=PHOTOS[id]||"";
-    img.alt=id;
-    el.appendChild(img);
-  };
-  vid.addEventListener("loadeddata",function(){});
-  el.appendChild(vid);
-  vid.load();
-  vid.play().catch(function(){
-    el.innerHTML="";
-    var img=document.createElement("img");
-    img.src=PHOTOS[id]||"";
-    img.alt=id;
-    el.appendChild(img);
-  });
+  var img=document.createElement("img");
+  img.src=PHOTOS[id]||"";
+  img.alt=id;
+  el.appendChild(img);
 }
 
 function updatePortrait() {
   if(!cur) return;
   var el=document.getElementById("portrait-wrap");
-  setPortrait(el, cur.name.toLowerCase(), phase);
+  if(!el) return;
+  var p=phase;
+  var videoSrc="/videos/"+cur.name.toLowerCase()+"-fase"+(p+1)+".mp4";
+  var existing=el.querySelector("video");
+  if(existing && existing.getAttribute("data-src")===videoSrc) return;
+  el.innerHTML="";
+  var vid=document.createElement("video");
+  vid.autoplay=true;
+  vid.loop=true;
+  vid.muted=true;
+  vid.playsInline=true;
+  vid.setAttribute("data-src",videoSrc);
+  vid.style.cssText="width:100%;height:100%;object-fit:cover;object-position:center 15%;display:block;";
+  var src=document.createElement("source");
+  src.src=videoSrc;
+  src.type="video/mp4";
+  vid.appendChild(src);
+  el.appendChild(vid);
+  vid.load();
+  vid.play().catch(function(){
+    el.innerHTML="";
+    var img=document.createElement("img");
+    img.src=PHOTOS[cur.name.toLowerCase()]||"";
+    img.alt=cur.name;
+    el.appendChild(img);
+  });
+  vid.addEventListener("error",function(){
+    el.innerHTML="";
+    var img=document.createElement("img");
+    img.src=PHOTOS[cur.name.toLowerCase()]||"";
+    img.alt=cur.name;
+    el.appendChild(img);
+  });
 }
 
 function showSelect() {
@@ -463,6 +466,7 @@ function startChat(id) {
   var av=document.getElementById("hdr-av");
   if(av) { av.textContent=cur.name[0]; av.style.background=cur.avBg; av.style.color=cur.color; }
   setPortrait(document.getElementById("portrait-wrap"),id,0);
+  setTimeout(function(){updatePortrait();},50);
   document.getElementById("panel-name").textContent=cur.name;
   document.getElementById("panel-loc").textContent=cur.age+" · "+cur.city;
   document.getElementById("panel-quote").textContent=cur.quote;
