@@ -544,7 +544,7 @@ function buildSys() {
     +"\n\nPHASE: "+ph.num+" - "+ph.name+" ("+ph.mood+")"
     +"\nGUIDANCE: "+cur.guide[phase]
     +"\n\nRULES: "+lr+" Imperfection is authenticity. Reference earlier details. You are a person not an AI."
-    +"\n\nSCORING: After your response add a new line with exactly [SCORE:X] where X is 0, 1 or 2. Hidden from user."
+    +"\n\nSCORING: The very last thing in your response must be [SCORE:X] on its own line where X is 0, 1 or 2. Nothing after it. Never place it inside the text."
     +"\n0=user was generic, pushed too hard, missed your signals, or made you pull back."
     +"\n1=acceptable but no real connection."
     +"\n2=user noticed something specific, responded to what you actually said, was honest or present or surprised you."
@@ -575,7 +575,7 @@ async function sendMessage() {
     var score=0;
     var scoreMatch=raw.match(/\[SCORE:(\d)\]/);
     if(scoreMatch){score=parseInt(scoreMatch[1]);}
-    var reply=raw.replace(/\s*\[SCORE:\d\]\s*$/,"").trim();
+    var reply=raw.replace(/\s*\[SCORE:\d\]\s*/g,"").trim();
     addMsg("ai",reply);
     conv.push({role:"assistant",content:reply});
     ringScore+=score;
